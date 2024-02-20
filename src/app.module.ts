@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { TerminusModule } from '@nestjs/terminus';
+import { FinchModule } from './services/finch/finch.module';
 
 @Module({
   imports: [
