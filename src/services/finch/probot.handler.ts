@@ -12,7 +12,7 @@ export default class ProbotHandler {
         logger.log(`Some repositories removed on @${account.login}`);
 
         for (const repo of context.payload?.repositories || []) {
-          logger.log(`Uninstalling schedules and rules for ${repo.full_name}`);
+          logger.log(`Removed ${repo.full_name}`);
         }
       });
     };

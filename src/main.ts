@@ -7,7 +7,9 @@ import { handlebars } from 'hbs';
 import fs from 'fs';
 
 async function bootstrap() {
-  const nestApp = await NestFactory.create<NestExpressApplication>(AppModule);
+  const nestApp = await NestFactory.create<NestExpressApplication>(AppModule, {
+    rawBody: true,
+  });
   nestApp.setViewEngine('hbs');
   nestApp.setBaseViewsDir(join(__dirname, '..', 'views'));
   nestApp.engine(
@@ -46,6 +48,6 @@ async function bootstrap() {
   await nestApp.listen(3000);
 }
 
-bootstrap().then((d) => {
-  console.log(d);
+bootstrap().then(() => {
+  console.log('\x07');
 });

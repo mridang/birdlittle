@@ -63,6 +63,7 @@ async function bootstrap() {
       AppModule,
       {
         logger: new PowertoolsLoggerService(),
+        rawBody: true,
       },
     );
     nestApp.setViewEngine('hbs');
