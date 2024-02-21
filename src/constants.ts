@@ -1,1 +1,1 @@
-export const secretName = 'Finch';
+export const secretName = 'FinchAppConfig';
