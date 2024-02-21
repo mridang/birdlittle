@@ -11,7 +11,6 @@ declare global {
 config();
 // this allows test containers to work in build pipeline
 process.env.TESTCONTAINERS_RYUK_DISABLED = 'true';
-console.log(process.env);
 
 // noinspection JSUnusedGlobalSymbols
 export default async function setup(): Promise<void> {
