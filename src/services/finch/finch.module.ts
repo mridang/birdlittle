@@ -6,12 +6,20 @@ import ProbotHandler from './probot.handler';
 import GithubConfig from './github.config';
 import { Octokit } from '@octokit/rest';
 import { createAppAuth } from '@octokit/auth-app';
+import CanaryService from './canary.service';
 
 @Module({
   controllers: [WebhookController],
   providers: [
+    CanaryService,
     ProbotHandler,
     GithubConfig,
+    {
+      provide: 'WORKFLOW_NAME',
+      useFactory: () => {
+        return '.github/workflows/cypress.yml';
+      },
+    },
     {
       inject: [GithubConfig, ProbotHandler],
       provide: 'PROBOT',

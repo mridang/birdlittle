@@ -31,10 +31,6 @@ export class WebhookController {
         if (signature !== null && signature !== undefined) {
           const payload = await WebhookController.getPayload(request);
           if (payload !== null && payload !== undefined) {
-            console.log(id);
-            console.log(signature);
-            console.log(name);
-            console.log(payload);
             await this.probot.webhooks.verifyAndReceive({
               id: Array.isArray(id) ? id.join('|') : id,
               signature: Array.isArray(signature)
