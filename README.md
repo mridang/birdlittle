@@ -1,10 +1,10 @@
 # Birdlittle for GitHub
 
-Birdlittle is a deployment gate for GitHub Enterprise that 
+Birdlittle is a deployment gate for GitHub Enterprise that
 blocks deploying changes to production if canaries have not passed.
 
 I call it Birdlittle since it was the only name available. There's
-a bird in the logo. 
+a bird in the logo.
 
 Birdlittle is a low-overhead app.
 
