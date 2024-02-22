@@ -1,17 +1,12 @@
-# Railcross for GitHub
+# Birdlittle for GitHub
 
-Railcross prevents your teams from merging pull requests outside
-merge windows.
-Merge windows allow you to restrict the days and
-times that pull requests may be merged.
+Birdlittle is a deployment gate for GitHub Enterprise that 
+blocks deploying changes to production if canaries have not passed.
 
-Think of it as a railway crossing, you can't cross until the
-train has passed. 🚂
+I call it Birdlittle since it was the only name available. There's
+a bird in the logo. 
 
-Railcross is a low-overhead app and simply prevents your team
-from merging between 0900 and 1600. It does this by locking the
-branch protection rule of your default branch.
-Any existing branch protection rules (even on the same branch) are not affected.
+Birdlittle is a low-overhead app.
 
 ## Table of Contents
 
@@ -23,7 +18,7 @@ Any existing branch protection rules (even on the same branch) are not affected.
 
 ## Installation
 
-1. Go to the [Railcross](https://github.com/apps/railcross) page on GitHub Marketplace
+1. Go to the [Birdlittle](https://github.com/apps/birdlittle) page on GitHub Marketplace
 2. Click the **Install** button
 3. Choose the repositories where you want to install the app
 
@@ -33,7 +28,7 @@ Alternatively, you can deploy your own instance of [Probot App Name] by followin
 
 ## Developing
 
-Railcross is built with Typescript 5.3 using the NestJS and
+Birdlittle is built with Typescript 5.3 using the NestJS and
 requires Node 20 to run.
 
 After checking out the repository, run `npm install` to install all
@@ -137,9 +132,9 @@ application has been able to correctly initialize itself.
 
 ## Contributing
 
-If you have suggestions for how Railcross could be improved, or
-want to report a bug, open an issue - we'd love all and any
-contributions.
+If you have suggestions for how Birdlittle could be improved, or
+want to report a bug, open an issue.
+We'd love all and any contributions.
 
 ## License
 
