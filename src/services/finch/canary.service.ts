@@ -5,7 +5,6 @@ import { Octokit } from '@octokit/rest';
 import { InstallationAccessTokenData } from '@octokit/auth-app/dist-types/types';
 import { getZipFile } from '../../utils/archive';
 import { Release } from './types';
-import { Release } from './types';
 
 @Injectable()
 export default class CanaryService {
