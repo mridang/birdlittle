@@ -29,6 +29,7 @@ export default class CanaryService {
     repoName: string,
   ) {
     const octokit = this.octokitFn(installationId);
+
     const response = await octokit.actions.listRepoWorkflows({
       owner: orgName,
       repo: repoName,

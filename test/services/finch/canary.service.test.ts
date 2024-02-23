@@ -18,7 +18,7 @@ describe('canary.service test', () => {
       1,
       'qa',
       repoName.orgName,
-      repoName.orgName,
+      repoName.repoName,
     );
   });
 });
