@@ -51,7 +51,7 @@ export default class ProbotHandler {
         const { full_name: repoName } = context.payload.repository;
         const { id: runId, actor } = context.payload.workflow_run;
 
-        if (actor.login === 'canary-for-github[bot]') {
+        if (actor.login === 'birdlittle[bot]') {
           logger.log(
             `Workflow #${runId} completed successfully for ${repoName}.`,
           );

@@ -2,7 +2,7 @@ import { Octokit } from '@octokit/rest';
 import CanaryService from '../../../src/services/finch/canary.service';
 import Repository from '../../../src/services/finch/types';
 
-describe('protection.service test', () => {
+describe('canary.service test', () => {
   const repoName = new Repository(process.env.JEST_GITHUB_REPO as string);
   const githubPat: string = process.env.JEST_GITHUB_PAT as string;
 
