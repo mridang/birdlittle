@@ -48,7 +48,8 @@
     "eslint-config-standard-with-typescript": {
       "@typescript-eslint/eslint-plugin": "^7.0.0"
     },
-    "axios": "1.6.7"
+    "axios": "1.6.7",
+    "ip": "2.0.1"
   },
   "devDependencies": {
     "@nestjs/testing": "^10.3.3",
