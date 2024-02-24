@@ -16,6 +16,11 @@ Birdlittle is a low-overhead app.
 - [Contributing](#contributing)
 - [License](#license)
 
+## Architechture
+
+<img width="1254" alt="Screenshot 2024-02-24 at 22 03 49" src="https://github.com/mridang/birdlittle/assets/327432/e795eceb-a9a1-4ae7-af22-fca190fa8b48">
+
+
 ## Installation
 
 1. Go to the [Birdlittle](https://github.com/apps/birdlittle) page on GitHub Marketplace
