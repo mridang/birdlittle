@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals';
 import request from 'supertest';
 import { HttpStatus } from '@nestjs/common';
 import { End2EndModule } from '../../e2e.module';

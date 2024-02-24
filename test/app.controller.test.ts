@@ -25,21 +25,19 @@ describe('app.controller test', () => {
     return request(testModule.app.getHttpServer())
       .get('/health')
       .expect(HttpStatus.OK)
-      .expect((res) => {
-        expect(res.body).toEqual({
-          status: 'ok',
-          info: {
-            '1.1.1.1': {
-              status: 'up',
-            },
+      .expect({
+        status: 'ok',
+        info: {
+          '1.1.1.1': {
+            status: 'up',
           },
-          error: {},
-          details: {
-            '1.1.1.1': {
-              status: 'up',
-            },
+        },
+        error: {},
+        details: {
+          '1.1.1.1': {
+            status: 'up',
           },
-        });
+        },
       });
   });
 });
