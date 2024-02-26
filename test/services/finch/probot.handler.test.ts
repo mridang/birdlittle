@@ -1,5 +1,5 @@
 import { expect } from '@jest/globals';
-import { Probot, Context } from 'probot';
+import { Context, Probot } from 'probot';
 import CanaryService from '../../../src/services/finch/canary.service';
 import ProbotHandler from '../../../src/services/finch/probot.handler';
 import { Logger } from '@nestjs/common';
