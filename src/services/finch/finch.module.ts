@@ -7,6 +7,9 @@ import GithubConfig from './github.config';
 import { Octokit } from '@octokit/rest';
 import { createAppAuth } from '@octokit/auth-app';
 import CanaryService from './canary.service';
+import { retry } from '@octokit/plugin-retry';
+
+const MyOctokit = Octokit.plugin(retry);
 
 @Module({
   controllers: [WebhookController],
@@ -47,12 +50,15 @@ import CanaryService from './canary.service';
         const secret = await githubConfig.getSecret(secretName);
 
         return (installationId: number) => {
-          return new Octokit({
+          return new MyOctokit({
             authStrategy: createAppAuth,
             auth: {
               appId: secret.appId,
               privateKey: secret.privateKey,
               installationId: installationId,
+            },
+            retry: {
+              doNotRetry: ['429'],
             },
           });
         };
