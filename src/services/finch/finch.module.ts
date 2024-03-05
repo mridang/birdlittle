@@ -8,6 +8,8 @@ import { Octokit } from '@octokit/rest';
 import { createAppAuth } from '@octokit/auth-app';
 import CanaryService from './canary.service';
 import { retry } from '@octokit/plugin-retry';
+import path from 'path';
+import { SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 
 const MyOctokit = Octokit.plugin(retry);
 
@@ -17,6 +19,16 @@ const MyOctokit = Octokit.plugin(retry);
     CanaryService,
     ProbotHandler,
     GithubConfig,
+    {
+      provide: 'ENV_PATH',
+      useValue: process.env.ENV_PATH || path.resolve(process.cwd(), '.env'),
+    },
+    {
+      provide: 'SECRETS_MANAGER_CLIENT',
+      useFactory: () => {
+        return new SecretsManagerClient();
+      },
+    },
     {
       provide: 'WORKFLOW_NAME',
       useFactory: () => {
