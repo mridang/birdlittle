@@ -70,7 +70,7 @@ const MyOctokit = Octokit.plugin(retry);
               installationId: installationId,
             },
             retry: {
-              doNotRetry: ['429'],
+              doNotRetry: [400, 401, 403, 404, 422, 429, 451],
             },
           });
         };
