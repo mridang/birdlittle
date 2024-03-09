@@ -40,4 +40,17 @@ describe('app.controller test', () => {
         },
       });
   });
+
+  it('/404 (GET)', async () => {
+    await request(testModule.app.getHttpServer())
+      .get('/404')
+      .set('Accept', 'text/html')
+      .expect(HttpStatus.NOT_FOUND)
+      .expect('Content-Type', 'text/html; charset=UTF-8')
+      .expect((response) => {
+        if (!response.text.includes('<title>Not Found</title>')) {
+          throw new Error('Expected text not found in response');
+        }
+      });
+  });
 });
