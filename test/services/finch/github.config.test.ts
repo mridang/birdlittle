@@ -1,7 +1,7 @@
 import { expect } from '@jest/globals';
 import {
-  SecretsManagerClient,
   CreateSecretCommand,
+  SecretsManagerClient,
 } from '@aws-sdk/client-secrets-manager';
 import { TextEncoder } from 'util';
 import { join } from 'path';
