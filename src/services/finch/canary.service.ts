@@ -98,7 +98,7 @@ export default class CanaryService {
       );
       const releaseId = new Release(releaseTxt.trim());
 
-      const response = await octokit.request(
+      await octokit.request(
         'POST /repos/{owner}/{repo}/actions/runs/{run_id}/deployment_protection_rule',
         {
           owner: orgName,
@@ -108,8 +108,6 @@ export default class CanaryService {
           state: approvalState,
         },
       );
-
-      console.log(response.data);
     }
   }
 }
