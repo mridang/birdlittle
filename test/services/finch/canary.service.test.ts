@@ -4,13 +4,14 @@ import nock from 'nock';
 import { buildAxiosFetch } from '@lifeomic/axios-fetch';
 import axios from 'axios';
 import AdmZip from 'adm-zip';
+import { HttpStatus } from '@nestjs/common';
 
 describe('canary.service test', () => {
   beforeEach(() => {
     nock('https://api.github.com')
       .persist()
       .get('/repos/mridang/testing/actions/workflows')
-      .reply(200, {
+      .reply(HttpStatus.OK, {
         total_count: 4,
         workflows: [
           {
@@ -72,9 +73,9 @@ describe('canary.service test', () => {
         ],
       })
       .post('/repos/mridang/testing/actions/workflows/86719211/dispatches')
-      .reply(200, {})
+      .reply(HttpStatus.OK, {})
       .get('/repos/mridang/testing/actions/runs/1314065581/artifacts')
-      .reply(200, {
+      .reply(HttpStatus.OK, {
         total_count: 1,
         artifacts: [
           {
@@ -101,7 +102,7 @@ describe('canary.service test', () => {
       })
       .get('/repos/mridang/testing/actions/artifacts/1314065581/zip')
       .reply(
-        200,
+        HttpStatus.OK,
         () => {
           const zip = new AdmZip();
           zip.addFile('release.txt', Buffer.from('666/hell'));
@@ -112,7 +113,7 @@ describe('canary.service test', () => {
       .post(
         '/repos/mridang/testing/actions/runs/666/deployment_protection_rule',
       )
-      .reply(200, {});
+      .reply(HttpStatus.OK, {});
   });
 
   afterEach(() => {
