@@ -2,7 +2,6 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { RestEndpointMethods } from '@octokit/plugin-rest-endpoint-methods/dist-types/generated/method-types';
 import { Api } from '@octokit/plugin-rest-endpoint-methods/dist-types/types';
 import { Octokit } from '@octokit/rest';
-import { InstallationAccessTokenData } from '@octokit/auth-app/dist-types/types';
 import { getZipFile } from '../../utils/archive';
 import { Release } from './types';
 
@@ -82,17 +81,23 @@ export default class CanaryService {
     if (artifact === undefined) {
       throw new Error('Artifact not found.');
     } else {
-      const auth = (await octokit.auth({
-        type: 'installation',
-      })) as InstallationAccessTokenData;
-
       this.logger.log(`Downloading artifact ${artifact.archive_download_url}`);
-      const archive = await fetch(artifact.archive_download_url, {
-        headers: { Authorization: `token ${auth.token}` },
-      });
+      const archive = await octokit.request(
+        `GET ${artifact.archive_download_url}`,
+        {
+          headers: {
+            accept: 'application/octet-stream',
+          },
+          request: {
+            redirect: 'follow',
+          },
+          mediaType: {
+            format: '',
+          },
+        },
+      );
 
-      const archiveZip = Buffer.from(await archive.arrayBuffer());
-      const releaseTxt = getZipFile(archiveZip, 'release.txt');
+      const releaseTxt = getZipFile(Buffer.from(archive.data), 'release.txt');
       this.logger.log(
         `Found release identifier ${releaseTxt.trim()} in archive`,
       );
