@@ -6,7 +6,7 @@ import { secretName } from './src/constants';
 const serverlessConfiguration: AWS = {
   service: packageJson.name,
   frameworkVersion: '3',
-  plugins: ['serverless-plugin-typescript', 'serverless-offline'],
+  plugins: ['serverless-plugin-typescript'],
   package: {
     individually: false,
     patterns: [

@@ -29,6 +29,10 @@ export default class CanaryService {
   ) {
     const octokit = this.octokitFn(installationId);
 
+    const { data: repository } = await octokit.repos.get({
+      owner: orgName,
+      repo: repoName,
+    });
     const response = await octokit.actions.listRepoWorkflows({
       owner: orgName,
       repo: repoName,
@@ -43,7 +47,7 @@ export default class CanaryService {
         owner: orgName,
         repo: repoName,
         workflow_id: workflow.id,
-        ref: 'refs/heads/master',
+        ref: `refs/heads/${repository.default_branch}`,
         inputs: {
           release_identifier: `${deploymentId}/${environmentName}`,
         },
