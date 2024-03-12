@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { HttpStatus, Module } from '@nestjs/common';
 import { WebhookController } from './webhook.controller';
 import { secretName } from '../../constants';
 import { createProbot } from 'probot';
@@ -70,7 +70,14 @@ const MyOctokit = Octokit.plugin(retry);
               installationId: installationId,
             },
             retry: {
-              doNotRetry: [400, 401, 403, 404, 422, 429, 451],
+              doNotRetry: [
+                HttpStatus.BAD_REQUEST,
+                HttpStatus.UNAUTHORIZED,
+                HttpStatus.FORBIDDEN,
+                HttpStatus.NOT_FOUND,
+                HttpStatus.UNPROCESSABLE_ENTITY,
+                HttpStatus.TOO_MANY_REQUESTS,
+              ],
             },
           });
         };
