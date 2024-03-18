@@ -89,14 +89,11 @@ export default class CanaryService {
       const archive = await octokit.request(
         `GET ${artifact.archive_download_url}`,
         {
-          headers: {
-            accept: 'application/octet-stream',
-          },
           request: {
             redirect: 'follow',
           },
           mediaType: {
-            format: '',
+            format: 'raw',
           },
         },
       );
