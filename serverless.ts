@@ -161,6 +161,7 @@ const serverlessConfiguration: AWS = {
             {
               Name: fullDomainName,
               Type: 'A',
+              SetIdentifier: 'Primary',
               AliasTarget: {
                 HostedZoneId: 'Z2FDTNDATAQYW2', // CloudFront's Hosted Zone ID
                 DNSName: {
@@ -173,6 +174,7 @@ const serverlessConfiguration: AWS = {
             {
               Name: fullDomainName,
               Type: 'AAAA',
+              SetIdentifier: 'PrimaryIPv6',
               AliasTarget: {
                 HostedZoneId: 'Z2FDTNDATAQYW2', // CloudFront's Hosted Zone ID
                 DNSName: {
