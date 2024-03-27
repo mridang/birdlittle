@@ -24,7 +24,7 @@ import { FinchModule } from './services/finch/finch.module';
           return {
             dsn: process.env.SENTRY_DSN,
             environment: process.env.NODE_ENV || 'development',
-            enabled: ['development', 'test'].includes(
+            enabled: !['development', 'test'].includes(
               process.env.NODE_ENV || '',
             ),
             logLevels: ['debug'],
@@ -35,7 +35,7 @@ import { FinchModule } from './services/finch/finch.module';
           return {
             dsn: new URL(sentryDSN.SENTRY_DSN).toString(),
             environment: process.env.NODE_ENV || 'development',
-            enabled: ['development', 'test'].includes(
+            enabled: !['development', 'test'].includes(
               process.env.NODE_ENV || '',
             ),
             logLevels: ['debug'],
