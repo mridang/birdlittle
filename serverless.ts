@@ -126,6 +126,9 @@ const serverlessConfiguration: AWS = {
                   HTTPSPort: 443,
                   OriginProtocolPolicy: 'https-only',
                 },
+                OriginAccessControlId: {
+                  Ref: 'LambdaOriginAccessControl',
+                },
               },
             ],
             DefaultCacheBehavior: {
