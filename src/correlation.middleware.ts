@@ -1,4 +1,4 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Injectable, NestMiddleware, Optional } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import { getCurrentInvoke } from '@codegenie/serverless-express';
 import { ClsService } from 'nestjs-cls';
@@ -9,10 +9,12 @@ import path from 'node:path';
 @Injectable()
 export class RequestIdMiddleware implements NestMiddleware {
   private isColdStart = true;
+  @Optional()
   private readonly uaCache = new Map<string, UAParser.IResult>();
 
   constructor(
     private readonly clsService: ClsService,
+    @Optional()
     private readonly currentInvoke: () => Context = () => {
       return getCurrentInvoke().context as Context;
     },
