@@ -1,6 +1,4 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { RestEndpointMethods } from '@octokit/plugin-rest-endpoint-methods/dist-types/generated/method-types';
-import { Api } from '@octokit/plugin-rest-endpoint-methods/dist-types/types';
 import { Octokit } from '@octokit/rest';
 import { getZipFile } from '../../utils/archive';
 import { Release } from './types';
@@ -11,9 +9,7 @@ export default class CanaryService {
 
   public constructor(
     @Inject('GITHUB_FN')
-    private readonly octokitFn: (
-      installationId: number,
-    ) => RestEndpointMethods & Api & Octokit,
+    private readonly octokitFn: (installationId: number) => Octokit,
     @Inject('WORKFLOW_NAME')
     private readonly workflowPath: string = '.github/workflows/cypress.yml',
   ) {
