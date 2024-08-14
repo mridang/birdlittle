@@ -3,7 +3,7 @@ import AdmZip from 'adm-zip';
 import { getZipFile } from '../../src/utils/archive';
 
 describe('getZipFile', () => {
-  it('extracts and returns the content of a file from a ZIP buffer', () => {
+  test('extracts and returns the content of a file from a ZIP buffer', () => {
     const zip = new AdmZip();
 
     const fileName = 'test.txt';
@@ -15,7 +15,7 @@ describe('getZipFile', () => {
     expect(getZipFile(buffer, fileName)).toBe(fileContent);
   });
 
-  it('throws an error if the file does not exist in the ZIP archive', () => {
+  test('throws an error if the file does not exist in the ZIP archive', () => {
     const zip = new AdmZip();
     const buffer = zip.toBuffer();
     const nonExistentFileName = 'nonexistent.txt';

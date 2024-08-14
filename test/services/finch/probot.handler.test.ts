@@ -27,7 +27,7 @@ describe('probot.handler test', () => {
     jest.spyOn(Logger.prototype, 'log').mockImplementation(() => {});
   });
 
-  it('handles workflow_run.completed event', async () => {
+  test('handles workflow_run.completed event', async () => {
     const initApp = probotHandler.init();
     initApp(mockProbot);
 
@@ -60,7 +60,7 @@ describe('probot.handler test', () => {
     );
   });
 
-  it('handles deployment_protection_rule.requested event', async () => {
+  test('handles deployment_protection_rule.requested event', async () => {
     const initApp = probotHandler.init();
     initApp(mockProbot);
 
