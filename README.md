@@ -40,7 +40,7 @@ The application uses X-Ray for tracing and Cloudwatch for logging.
 The application is designed to be stateless and does not have any sort
 of persistence—this includes all ephemeral persistence, e.g. caches.
 
-<img src="https://github.com/mridang/birdlittle/assets/327432/e795eceb-a9a1-4ae7-af22-fca190fa8b48">
+<img src="https://github.com/mridang/birdlittle/assets/327432/e795eceb-a9a1-4ae7-af22-fca190fa8b48](https://github.com/user-attachments/assets/d87b7178-212b-4eda-95f1-cdb3b5757d99">
 
 ## Developing
 
