@@ -10,14 +10,7 @@ import { tmpdir } from 'node:os';
 import GithubConfig from '../../../src/services/finch/github.config';
 
 describe('github.config tests', () => {
-  const secretsManagerClient = new SecretsManagerClient({
-    endpoint: 'http://localhost:4566',
-    region: 'us-east-1',
-    credentials: {
-      accessKeyId: 'test',
-      secretAccessKey: 'test',
-    },
-  });
+  const secretsManagerClient = new SecretsManagerClient();
 
   test('should read secrets from SecretString', async () => {
     const githubConfig: GithubConfig = new GithubConfig(
