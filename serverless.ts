@@ -311,6 +311,12 @@ const serverlessConfiguration: AWS = {
       url: true,
     },
   },
+  custom: {
+    servestatic: {
+      include: ['public/**/*'],
+      public: false,
+    },
+  },
 };
 
 module.exports = serverlessConfiguration;
