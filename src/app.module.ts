@@ -20,6 +20,7 @@ import { ClsModule } from 'nestjs-cls';
 import { TimingInterceptor } from './timing.interceptor';
 import { BetterLogger } from './logger';
 import { RequestIdMiddleware } from './correlation.middleware';
+import { existsSync } from 'fs';
 
 @Global()
 @Module({
@@ -55,10 +56,28 @@ import { RequestIdMiddleware } from './correlation.middleware';
       },
       inject: ['SECRETS_MANAGER_CLIENT'],
     }),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
-      serveRoot: '/static',
-    }),
+    ServeStaticModule.forRoot(
+      ...(existsSync(join(__dirname, 'public'))
+        ? [
+            {
+              rootPath: join(__dirname, 'public'),
+              serveRoot: '/static',
+            },
+          ]
+        : existsSync(join(__dirname, '..', 'public'))
+          ? [
+              {
+                rootPath: join(__dirname, '..', 'public'),
+                serveRoot: '/static',
+              },
+            ]
+          : [
+              {
+                rootPath: join(__dirname, '..', '..', 'public'),
+                serveRoot: '/static',
+              },
+            ]),
+    ),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
