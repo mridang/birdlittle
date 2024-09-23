@@ -1,15 +1,12 @@
 import { HttpStatus, Module } from '@nestjs/common';
 import { WebhookController } from './webhook.controller';
-import { secretName } from '../../constants';
 import { createProbot } from 'probot';
 import ProbotHandler from './probot.handler';
-import GithubConfig from './github.config';
 import { Octokit } from '@octokit/rest';
 import { createAppAuth } from '@octokit/auth-app';
 import CanaryService from './canary.service';
 import { retry } from '@octokit/plugin-retry';
-import path from 'path';
-import { SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
+import { ConfigService } from '@nestjs/config';
 
 const MyOctokit = Octokit.plugin(retry);
 
@@ -18,17 +15,6 @@ const MyOctokit = Octokit.plugin(retry);
   providers: [
     CanaryService,
     ProbotHandler,
-    GithubConfig,
-    {
-      provide: 'ENV_PATH',
-      useValue: process.env.ENV_PATH || path.resolve(process.cwd(), '.env'),
-    },
-    {
-      provide: 'SECRETS_MANAGER_CLIENT',
-      useFactory: () => {
-        return new SecretsManagerClient();
-      },
-    },
     {
       provide: 'WORKFLOW_NAME',
       useFactory: () => {
@@ -36,17 +22,19 @@ const MyOctokit = Octokit.plugin(retry);
       },
     },
     {
-      inject: [GithubConfig, ProbotHandler],
+      inject: [ConfigService, ProbotHandler],
       provide: 'PROBOT',
       useFactory: async (
-        githubConfig: GithubConfig,
+        configService: ConfigService,
         probotHandler: ProbotHandler,
       ) => {
-        const secret = await githubConfig.getSecret(secretName);
-
         const probot = createProbot({
           overrides: {
-            ...secret,
+            secret: configService.getOrThrow('GITHUB_WEBHOOK_SECRET'),
+            appId: configService.getOrThrow('GITHUB_APP_ID'),
+            privateKey: configService
+              .getOrThrow('GITHUB_PRIVATE_KEY')
+              .replaceAll('&', '\n'),
           },
         });
 
@@ -56,17 +44,17 @@ const MyOctokit = Octokit.plugin(retry);
       },
     },
     {
-      inject: [GithubConfig],
+      inject: [ConfigService],
       provide: 'GITHUB_FN',
-      useFactory: async (githubConfig: GithubConfig) => {
-        const secret = await githubConfig.getSecret(secretName);
-
+      useFactory: async (configService: ConfigService) => {
         return (installationId: number) => {
           return new MyOctokit({
             authStrategy: createAppAuth,
             auth: {
-              appId: secret.appId,
-              privateKey: secret.privateKey,
+              appId: configService.getOrThrow('GITHUB_APP_ID'),
+              privateKey: configService
+                .getOrThrow('GITHUB_PRIVATE_KEY')
+                .replaceAll('&', '\n'),
               installationId: installationId,
             },
             retry: {
