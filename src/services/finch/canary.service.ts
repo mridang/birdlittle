@@ -2,14 +2,17 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Octokit } from '@octokit/rest';
 import { getZipFile } from '../../utils/archive';
 import { Release } from './types';
+import { OctokitImpl } from '../github/octokit/types';
 
 @Injectable()
 export default class CanaryService {
   private readonly logger = new Logger(CanaryService.name);
 
   public constructor(
-    @Inject('GITHUB_FN')
-    private readonly octokitFn: (installationId: number) => Octokit,
+    @Inject(OctokitImpl)
+    private readonly octokitFn: (
+      accessTokenOrInstallationId: number | string,
+    ) => Octokit,
     @Inject('WORKFLOW_NAME')
     private readonly workflowPath: string = '.github/workflows/cypress.yml',
   ) {
