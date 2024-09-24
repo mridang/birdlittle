@@ -2,14 +2,10 @@ import { Module } from '@nestjs/common';
 import { WebhookController } from './webhook.controller';
 import { createProbot } from 'probot';
 import ProbotHandler from './probot.handler';
-import { Octokit } from '@octokit/rest';
 import CanaryService from './canary.service';
-import { retry } from '@octokit/plugin-retry';
 import { ConfigService } from '@nestjs/config';
 import { GithubModule } from '../github/github.module';
 import { OctokitModule } from '../github/octokit/octokit.module';
-
-const MyOctokit = Octokit.plugin(retry);
 
 @Module({
   controllers: [WebhookController],
