@@ -1,9 +1,8 @@
-import { HttpStatus, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { WebhookController } from './webhook.controller';
 import { createProbot } from 'probot';
 import ProbotHandler from './probot.handler';
 import { Octokit } from '@octokit/rest';
-import { createAppAuth } from '@octokit/auth-app';
 import CanaryService from './canary.service';
 import { retry } from '@octokit/plugin-retry';
 import { ConfigService } from '@nestjs/config';
