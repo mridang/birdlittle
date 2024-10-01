@@ -13,7 +13,6 @@ const testModule = new End2EndModule({
 });
 
 describe('finch.module tests', () => {
-
   beforeAll(async () => {
     await testModule.beforeAll();
   });
@@ -23,7 +22,6 @@ describe('finch.module tests', () => {
   });
 
   test('that the webhook hander is registered', async () => {
-    expect(await testModule.app
-      .get(ProbotHandler)).toBeDefined();
+    expect(await testModule.app.get(ProbotHandler)).toBeDefined();
   });
 });
