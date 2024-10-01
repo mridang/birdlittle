@@ -1,33 +1,34 @@
-import { Probot } from 'probot';
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import CanaryService from './canary.service';
 import Repository from './types';
+import { WebhookHandler } from '../github/webhook/webhook.interfaces';
 
 @Injectable()
 export default class ProbotHandler {
-  constructor(private readonly canaryService: CanaryService) {
-    //
-  }
+  private readonly logger = new Logger(ProbotHandler.name);
 
-  init(): (p: Probot) => void {
-    const canaryService: CanaryService = this.canaryService;
-    return (app: Probot) => {
-      const logger = new Logger(ProbotHandler.name);
-      const regex: RegExp = /runs\/(\d+)\/deployment_protection_rule/;
+  constructor(
+    readonly canaryService: CanaryService,
+    @Inject(WebhookHandler)
+    readonly webhookHandler: WebhookHandler,
+  ) {
+    const regex: RegExp = /runs\/(\d+)\/deployment_protection_rule/;
 
-      app.on('deployment_protection_rule.requested', async (context) => {
+    this.webhookHandler.on(
+      'deployment_protection_rule.requested',
+      async (context) => {
         const { id: installationId } = context.payload.installation ?? {
           id: NaN,
         };
         const { full_name: repoName } = context.payload.repository;
         const { id: deploymentId } = context.payload.deployment || { id: NaN };
 
-        logger.log(
+        this.logger.log(
           `Running canary for deployment ${deploymentId} on ${repoName}`,
         );
 
         const match = context.payload.deployment_callback_url?.match(regex);
-        logger.log(
+        this.logger.log(
           `Deployment #${deploymentId} has URL ${context.payload.deployment_callback_url}`,
         );
         if (!match || !match[1]) {
@@ -42,36 +43,36 @@ export default class ProbotHandler {
           githubRepo.orgName,
           githubRepo.repoName,
         );
-      });
+      },
+    );
 
-      app.on('workflow_run.completed', async (context) => {
-        const { id: installationId } = context.payload.installation ?? {
-          id: NaN,
-        };
-        const { full_name: repoName } = context.payload.repository;
-        const { id: runId, actor } = context.payload.workflow_run;
+    this.webhookHandler.on('workflow_run.completed', async (context) => {
+      const { id: installationId } = context.payload.installation ?? {
+        id: NaN,
+      };
+      const { full_name: repoName } = context.payload.repository;
+      const { id: runId, actor } = context.payload.workflow_run;
 
-        if (actor.login === 'birdlittle[bot]') {
-          logger.log(
-            `Workflow #${runId} completed successfully for ${repoName}.`,
-          );
+      if (actor.login === 'birdlittle[bot]') {
+        this.logger.log(
+          `Workflow #${runId} completed successfully for ${repoName}.`,
+        );
 
-          const githubRepo = new Repository(repoName);
-          await canaryService.handleGate(
-            installationId,
-            runId,
-            githubRepo.orgName,
-            githubRepo.repoName,
-            context.payload.workflow_run.conclusion === 'success'
-              ? 'approved'
-              : 'rejected',
-          );
-        } else {
-          logger.log(
-            `Ignoring workflow run ${runId} because it was triggered by ${actor.login}`,
-          );
-        }
-      });
-    };
+        const githubRepo = new Repository(repoName);
+        await canaryService.handleGate(
+          installationId,
+          runId,
+          githubRepo.orgName,
+          githubRepo.repoName,
+          context.payload.workflow_run.conclusion === 'success'
+            ? 'approved'
+            : 'rejected',
+        );
+      } else {
+        this.logger.log(
+          `Ignoring workflow run ${runId} because it was triggered by ${actor.login}`,
+        );
+      }
+    });
   }
 }
