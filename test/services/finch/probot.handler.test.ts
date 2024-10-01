@@ -1,9 +1,10 @@
 import { expect } from '@jest/globals';
-import { Context, Probot } from 'probot';
 import CanaryService from '../../../src/services/finch/canary.service';
 import ProbotHandler from '../../../src/services/finch/probot.handler';
 import { Logger } from '@nestjs/common';
-import { EmitterWebhookEvent } from '@octokit/webhooks';
+import { EmitterWebhookEvent, EmitterWebhookEventName } from '@octokit/webhooks';
+import { HandlerFunction } from '@octokit/webhooks/dist-types/types';
+import { WebhookHandler } from '../../../src/services/github/webhook/webhook.interfaces';
 
 class MockCanaryService implements Partial<CanaryService> {
   runCanary = jest.fn();
@@ -11,25 +12,51 @@ class MockCanaryService implements Partial<CanaryService> {
   logger = { log: jest.fn(), error: jest.fn() }; // Mock any other properties as needed
 }
 
-describe('probot.handler test', () => {
+class TestWebhookHandler implements WebhookHandler {
+  private readonly handlers: Map<
+    EmitterWebhookEventName,
+    HandlerFunction<EmitterWebhookEventName, unknown>[]
+  > = new Map();
+
+  on<E extends EmitterWebhookEventName>(
+    event: E,
+    callback: HandlerFunction<E, unknown>,
+  ): void {
+    if (!this.handlers.has(event)) {
+      this.handlers.set(event, []);
+    }
+    this.handlers
+      .get(event)!
+      .push(callback as HandlerFunction<EmitterWebhookEventName, unknown>);
+  }
+
+  dispatch<E extends EmitterWebhookEventName>(
+    event: E,
+    payload: EmitterWebhookEvent<E>,
+  ) {
+    const callbacks = this.handlers.get(event);
+    if (callbacks) {
+      for (const callback of callbacks) {
+        callback(payload);
+      }
+    }
+  }
+}
+
+describe('probot.handler tests', () => {
   let probotHandler: ProbotHandler;
   let mockCanaryService: MockCanaryService;
-  let mockProbot: Probot;
+  const testHandler = new TestWebhookHandler();
 
   beforeEach(() => {
     mockCanaryService = new MockCanaryService();
 
-    probotHandler = new ProbotHandler(mockCanaryService as never);
-    mockProbot = new Probot({
-      appId: 'test',
-      githubToken: 'test',
-    });
+    probotHandler = new ProbotHandler(mockCanaryService as never, testHandler);
     jest.spyOn(Logger.prototype, 'log').mockImplementation(() => {});
   });
 
+
   test('handles workflow_run.completed event', async () => {
-    const initApp = probotHandler.init();
-    initApp(mockProbot);
 
     const context = {
       payload: {

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { OctokitModule } from './octokit/octokit.module';
+import { WebhookModule } from './webhook/webhook.module';
 
 @Module({
   controllers: [
@@ -9,7 +10,21 @@ import { OctokitModule } from './octokit/octokit.module';
   providers: [
     //
   ],
-  imports: [ConfigModule, OctokitModule],
+  imports: [
+    ConfigModule,
+    OctokitModule,
+    WebhookModule.registerAsync({
+      useFactory: async (configService: ConfigService, webhookHandler) => {
+        return {
+          webhookConfig: {
+            webhookSecret: configService.getOrThrow('GITHUB_WEBHOOK_SECRET'),
+          },
+          webhookHandler,
+        };
+      },
+      inject: [ConfigService],
+    }),
+  ],
   exports: [
     //
   ],
