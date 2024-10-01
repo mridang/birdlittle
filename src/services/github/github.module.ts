@@ -26,7 +26,7 @@ import { WebhookModule } from './webhook/webhook.module';
     }),
   ],
   exports: [
-    //
+    WebhookModule
   ],
 })
 export class GithubModule {
