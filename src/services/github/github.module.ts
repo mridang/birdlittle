@@ -25,9 +25,7 @@ import { WebhookModule } from './webhook/webhook.module';
       inject: [ConfigService],
     }),
   ],
-  exports: [
-    WebhookModule
-  ],
+  exports: [WebhookModule],
 })
 export class GithubModule {
   //
