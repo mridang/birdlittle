@@ -5,12 +5,13 @@ import { WebhookHandler } from '../github/webhook/webhook.interfaces';
 
 @Injectable()
 export default class ProbotHandler {
+  private readonly logger = new Logger(ProbotHandler.name);
+
   constructor(
     readonly canaryService: CanaryService,
     @Inject(WebhookHandler)
     readonly webhookHandler: WebhookHandler,
   ) {
-    const logger = new Logger(ProbotHandler.name);
     const regex: RegExp = /runs\/(\d+)\/deployment_protection_rule/;
 
     this.webhookHandler.on(
@@ -22,12 +23,12 @@ export default class ProbotHandler {
         const { full_name: repoName } = context.payload.repository;
         const { id: deploymentId } = context.payload.deployment || { id: NaN };
 
-        logger.log(
+        this.logger.log(
           `Running canary for deployment ${deploymentId} on ${repoName}`,
         );
 
         const match = context.payload.deployment_callback_url?.match(regex);
-        logger.log(
+        this.logger.log(
           `Deployment #${deploymentId} has URL ${context.payload.deployment_callback_url}`,
         );
         if (!match || !match[1]) {
@@ -53,7 +54,7 @@ export default class ProbotHandler {
       const { id: runId, actor } = context.payload.workflow_run;
 
       if (actor.login === 'birdlittle[bot]') {
-        logger.log(
+        this.logger.log(
           `Workflow #${runId} completed successfully for ${repoName}.`,
         );
 
@@ -68,7 +69,7 @@ export default class ProbotHandler {
             : 'rejected',
         );
       } else {
-        logger.log(
+        this.logger.log(
           `Ignoring workflow run ${runId} because it was triggered by ${actor.login}`,
         );
       }
