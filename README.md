@@ -1,6 +1,6 @@
 # Birdlittle for GitHub
 
-![Status](https://fimch.agarwal.la/version.svg)
+![Status](https://finch.agarwal.la/version.svg)
 
 Birdlittle is a deployment gate for GitHub Enterprise that
 blocks deploying changes to production if canaries have not passed.
