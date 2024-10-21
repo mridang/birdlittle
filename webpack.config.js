@@ -15,7 +15,7 @@ module.exports = {
   mode: 'production',
   devtool: 'source-map',
   resolve: {
-    extensions: ['.ts', '.tsx', '.js']
+    extensions: ['.ts', '.tsx', '.js'],
   },
   ignoreWarnings: [
     (warning) => {
@@ -85,9 +85,7 @@ module.exports = {
       reportFilename: path.resolve(__dirname, '.out', 'webpack.html'),
     }),
     new CopyWebpackPlugin({
-      patterns: [
-        { from: 'public', to: 'public' }
-      ],
+      patterns: [{ from: 'public', to: 'public' }],
     }),
   ],
   optimization: {
