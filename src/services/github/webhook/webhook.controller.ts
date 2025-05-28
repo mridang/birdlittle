@@ -4,7 +4,7 @@ import {
   Inject,
   Logger,
   Post,
-  RawBodyRequest,
+  type RawBodyRequest,
   Req,
 } from '@nestjs/common';
 import { Request } from '@mridang/nestjs-defaults';
