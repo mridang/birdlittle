@@ -12,14 +12,8 @@
     "outDir": "dist",
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
-	  "isolatedModules": true
+    "isolatedModules": true
   },
-  "include": [
-    "**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts",
-    "dist"
-  ]
+  "include": ["**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts", "dist"]
 }
