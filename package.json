@@ -72,6 +72,7 @@
     "eslint": "^9.27.0",
     "find-free-ports": "^3.1.1",
     "jest": "^30.0.3",
+    "jest-junit": "^16.0.0",
     "knip": "^5.58.1",
     "nock": "^14.0.4",
     "prettier": "^3.5.3",
