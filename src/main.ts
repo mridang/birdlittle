@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { AppModule } from './app.module.js';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ClsService } from 'nestjs-cls';
 import { AsyncLocalStorage } from 'node:async_hooks';

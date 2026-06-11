@@ -1,13 +1,13 @@
-import { expect } from '@jest/globals';
-import CanaryService from '../../../src/services/finch/canary.service';
-import ProbotHandler from '../../../src/services/finch/probot.handler';
+import { expect, jest } from '@jest/globals';
+import CanaryService from '../../../src/services/finch/canary.service.js';
+import ProbotHandler from '../../../src/services/finch/probot.handler.js';
 import { Logger } from '@nestjs/common';
 import {
   EmitterWebhookEvent,
   EmitterWebhookEventName,
 } from '@octokit/webhooks';
-import { HandlerFunction } from '@octokit/webhooks/dist-types/types';
-import { WebhookHandler } from '../../../src/services/github/webhook/webhook.interfaces';
+import { HandlerFunction } from '@octokit/webhooks/types';
+import { WebhookHandler } from '../../../src/services/github/webhook/webhook.interfaces.js';
 
 class MockCanaryService implements Partial<CanaryService> {
   runCanary = jest.fn();

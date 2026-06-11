@@ -1,6 +1,6 @@
 import { expect } from '@jest/globals';
 import AdmZip from 'adm-zip';
-import { getZipFile } from '../../src/utils/archive';
+import { getZipFile } from '../../src/utils/archive.js';
 
 describe('getZipFile', () => {
   test('extracts and returns the content of a file from a ZIP buffer', () => {

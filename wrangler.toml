@@ -1,0 +1,32 @@
+name = "finchapp"
+main = "worker.mjs"
+account_id = "779037e608ab1102679ef8b1bd499d49"
+compatibility_date = "2025-09-15"
+compatibility_flags = [ "nodejs_compat" ]
+
+# Custom domain on the Cloudflare-managed `mrida.ng` zone. Cloudflare provisions
+# the DNS record and TLS certificate automatically on deploy.
+[[routes]]
+pattern = "finch.mrida.ng"
+custom_domain = true
+
+[alias]
+"@nestjs/microservices" = "./empty.cjs"
+"@nestjs/microservices/microservices-module" = "./empty.cjs"
+"@nestjs/websockets" = "./empty.cjs"
+"@nestjs/websockets/socket-module" = "./empty.cjs"
+"@aws-sdk/client-secrets-manager" = "./empty.cjs"
+"@sentry/node" = "./empty.cjs"
+"@nestjs/serve-static" = "./empty.cjs"
+"@codegenie/serverless-express" = "./empty.cjs"
+"@nestjs/graphql" = "./empty.cjs"
+"@apollo/subgraph" = "./empty.cjs"
+"@apollo/subgraph/package.json" = "./empty.json"
+"@apollo/subgraph/dist/directives" = "./empty.cjs"
+ts-morph = "./empty.cjs"
+"class-transformer/storage" = "./empty.cjs"
+
+[vars]
+NODE_ENV = "production"
+SERVICE_NAME = "finch"
+SERVICE_VERSION = "cloudflare"

@@ -72,3 +72,11 @@ Thumbs.db
 
 # Github Keys
 *.pem
+
+# Cloudflare Workers
+.dev.vars
+.wrangler/
+wrangler.log
+
+# Local design previews (scratch)
+preview/

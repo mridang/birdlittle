@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { OctokitModule } from './octokit/octokit.module';
-import { WebhookModule } from './webhook/webhook.module';
+import { OctokitModule } from './octokit/octokit.module.js';
+import { WebhookModule } from './webhook/webhook.module.js';
 
 @Module({
   controllers: [
