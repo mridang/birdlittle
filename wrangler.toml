@@ -5,9 +5,9 @@ compatibility_date = "2025-09-15"
 compatibility_flags = [ "nodejs_compat" ]
 
 # Custom domain on the Cloudflare-managed `mrida.ng` zone. Cloudflare provisions
-# the DNS record and TLS certificate automatically on deploy.
+# DNS + TLS automatically on deploy.
 [[routes]]
-pattern = "finch.mrida.ng"
+pattern = "finch.apps.mrida.ng"
 custom_domain = true
 
 [alias]
