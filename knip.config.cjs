@@ -1,3 +1,3 @@
 module.exports = {
-  entry: ['src/main.ts', 'worker.mjs'],
+  entry: ['worker.mjs'],
 };
