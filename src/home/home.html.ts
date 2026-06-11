@@ -13,7 +13,7 @@ export const HOME_HTML = `<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Birdlittle — deployment gates for GitHub</title>
 <meta name="description" content="Birdlittle is a GitHub App that runs your workflow as a deployment gate, approving or rejecting each release on the result." />
-<link rel="canonical" href="https://finch.apps.mrida.ng/" />
+<link rel="canonical" href="https://birdlittle.apps.mrida.ng/" />
 <meta name="theme-color" content="#fbfbfa" />
 <meta name="robots" content="index, follow" />
 <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/in/831907?v=4" />
@@ -21,10 +21,10 @@ export const HOME_HTML = `<!doctype html>
 
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Birdlittle" />
-<meta property="og:url" content="https://finch.apps.mrida.ng/" />
+<meta property="og:url" content="https://birdlittle.apps.mrida.ng/" />
 <meta property="og:title" content="Birdlittle — deployment gates for GitHub" />
 <meta property="og:description" content="Runs your workflow as a deployment gate, approving or rejecting each release on the result." />
-<meta property="og:image" content="https://finch.apps.mrida.ng/og.png" />
+<meta property="og:image" content="https://birdlittle.apps.mrida.ng/og.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="Birdlittle — ship with a second pair of eyes." />
@@ -32,7 +32,7 @@ export const HOME_HTML = `<!doctype html>
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Birdlittle — deployment gates for GitHub" />
 <meta name="twitter:description" content="Runs your workflow as a deployment gate, approving or rejecting each release on the result." />
-<meta name="twitter:image" content="https://finch.apps.mrida.ng/og.png" />
+<meta name="twitter:image" content="https://birdlittle.apps.mrida.ng/og.png" />
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
@@ -41,7 +41,7 @@ export const HOME_HTML = `<!doctype html>
 <style>body{-webkit-font-smoothing:antialiased}.display{font-optical-sizing:auto}</style>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Birdlittle","applicationCategory":"DeveloperApplication","operatingSystem":"GitHub","description":"A GitHub App that runs your workflow as a deployment gate, approving or rejecting each release on the result.","url":"https://finch.apps.mrida.ng/","author":{"@type":"Person","name":"Mridang Agarwalla","url":"https://github.com/mridang"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Birdlittle","applicationCategory":"DeveloperApplication","operatingSystem":"GitHub","description":"A GitHub App that runs your workflow as a deployment gate, approving or rejecting each release on the result.","url":"https://birdlittle.apps.mrida.ng/","author":{"@type":"Person","name":"Mridang Agarwalla","url":"https://github.com/mridang"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
 </script>
 </head>
 <body class="font-sans bg-[#fbfbfa] text-zinc-900 antialiased">
@@ -59,7 +59,7 @@ export const HOME_HTML = `<!doctype html>
         <p class="mt-7 text-[17px] leading-relaxed text-zinc-600 max-w-sm">Birdlittle runs your workflow as a deployment gate &mdash; approving or rejecting every release on the result, automatically.</p>
         <div class="mt-9 flex items-center gap-4">
           <a href="https://github.com/apps/birdlittle" class="rounded-full bg-zinc-900 px-7 py-3 text-sm font-medium text-white hover:bg-zinc-700 transition">Install</a>
-          <a href="https://github.com/mridang/finchapp" class="text-sm font-medium text-zinc-600 hover:text-zinc-900 transition">View source</a>
+          <a href="https://github.com/mridang/birdlittle" class="text-sm font-medium text-zinc-600 hover:text-zinc-900 transition">View source</a>
         </div>
       </div>
       <div class="rounded-2xl border border-zinc-200 bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04)] overflow-hidden">

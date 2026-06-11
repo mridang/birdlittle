@@ -43,7 +43,7 @@
     "node": "22.x"
   },
   "repository": {
-    "url": "https://github.com/mridang/finchapp"
+    "url": "https://github.com/mridang/birdlittle"
   },
   "devDependencies": {
     "@jest/globals": "^30.4.1",
