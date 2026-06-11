@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { secretName } from './constants.js';
 import { DefaultsModule } from '@mridang/nestjs-defaults';
-import { FinchModule } from './services/finch/finch.module.js';
+import { BirdlittleModule } from './services/birdlittle/birdlittle.module.js';
 import { HomeController } from './home/home.controller.js';
 
 @Global()
@@ -15,7 +15,7 @@ import { HomeController } from './home/home.controller.js';
       assets: false,
       sentry: false,
     }),
-    FinchModule,
+    BirdlittleModule,
   ],
   controllers: [HomeController],
   providers: [

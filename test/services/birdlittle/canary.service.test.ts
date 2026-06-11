@@ -1,5 +1,5 @@
 import { Octokit } from '@octokit/rest';
-import CanaryService from '../../../src/services/finch/canary.service.js';
+import CanaryService from '../../../src/services/birdlittle/canary.service.js';
 import nock from 'nock';
 import { buildAxiosFetch } from '@lifeomic/axios-fetch';
 import axios from 'axios';

@@ -1,4 +1,4 @@
-import { Controller, Get, Header, StreamableFile } from '@nestjs/common';
+import { Controller, Get, Header } from '@nestjs/common';
 import { HOME_HTML } from './home.html.js';
 import { OG_PNG_BASE64 } from './og-image.js';
 
@@ -25,10 +25,15 @@ export class HomeController {
    * @returns The 1200×630 share image for `GET /og.png`.
    */
   @Get('og.png')
+  @Header('Content-Type', 'image/png')
   @Header('Cache-Control', 'public, max-age=86400, immutable')
-  getOgImage(): StreamableFile {
-    return new StreamableFile(Buffer.from(OG_PNG_BASE64, 'base64'), {
-      type: 'image/png',
-    });
+  getOgImage(): Buffer {
+    // Return the raw PNG bytes as a Buffer (a Uint8Array). The Cloudflare
+    // adapter writes Uint8Array/ArrayBuffer/ReadableStream bodies through
+    // verbatim, and the `@Header` decorators above set the content type — it
+    // has no `StreamableFile` support, and a returned `Response` object would
+    // be JSON-stringified. Buffers also stream correctly on the Express
+    // platform used by the tests.
+    return Buffer.from(OG_PNG_BASE64, 'base64');
   }
 }

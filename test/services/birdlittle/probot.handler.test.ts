@@ -1,6 +1,6 @@
 import { expect, jest } from '@jest/globals';
-import CanaryService from '../../../src/services/finch/canary.service.js';
-import ProbotHandler from '../../../src/services/finch/probot.handler.js';
+import CanaryService from '../../../src/services/birdlittle/canary.service.js';
+import ProbotHandler from '../../../src/services/birdlittle/probot.handler.js';
 import { Logger } from '@nestjs/common';
 import {
   EmitterWebhookEvent,

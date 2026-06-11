@@ -28,5 +28,5 @@ ts-morph = "./empty.cjs"
 
 [vars]
 NODE_ENV = "production"
-SERVICE_NAME = "finch"
+SERVICE_NAME = "birdlittle"
 SERVICE_VERSION = "cloudflare"

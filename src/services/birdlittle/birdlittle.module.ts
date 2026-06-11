@@ -23,6 +23,6 @@ import ProbotHandler from './probot.handler.js';
     //
   ],
 })
-export class FinchModule {
+export class BirdlittleModule {
   //
 }
