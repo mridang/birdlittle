@@ -10,6 +10,8 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "outDir": "dist",
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
     "isolatedModules": true
   },
   "include": ["**/*"],
