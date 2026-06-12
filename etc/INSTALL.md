@@ -102,6 +102,7 @@ jobs:
       - name: Run Cypress Tests
         uses: cypress-io/github-action@v6
         with:
+          start: npx wrangler dev
 ```
 
 You may use that snippet as a template while ensuring that the lines marked
