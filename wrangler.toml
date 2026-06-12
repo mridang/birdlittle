@@ -36,3 +36,10 @@ ts-morph = "./empty.cjs"
 NODE_ENV = "production"
 SERVICE_NAME = "birdlittle"
 SERVICE_VERSION = "cloudflare"
+
+# Workers Observability: capture console logs (the winston output) and per-request
+# invocation traces (status, duration, CPU), queryable in the dashboard. Sample
+# 100% of requests — traffic is low enough that full fidelity is cheap.
+[observability]
+enabled = true
+head_sampling_rate = 1
