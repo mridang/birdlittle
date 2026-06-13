@@ -1,8 +1,6 @@
 import { Octokit } from '@octokit/rest';
 import CanaryService from '../../../src/services/birdlittle/canary.service.js';
 import nock from 'nock';
-import { buildAxiosFetch } from '@lifeomic/axios-fetch';
-import axios from 'axios';
 import AdmZip from 'adm-zip';
 import { HttpStatus } from '@nestjs/common';
 
@@ -279,9 +277,6 @@ describe('canary.service test', () => {
     const canaryService = new CanaryService(() => {
       return new Octokit({
         auth: 'no',
-        request: {
-          fetch: buildAxiosFetch(axios),
-        },
       });
     });
 
