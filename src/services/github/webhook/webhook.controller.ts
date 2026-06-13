@@ -9,8 +9,26 @@ import {
 } from '@nestjs/common';
 import { Request } from '@mridang/nestjs-defaults';
 import { WebhookEventName } from '@octokit/webhooks-types';
-import { WebhookConfig, WebhookHandler } from './webhook.interfaces';
+import { WebhookConfig, WebhookHandler } from './webhook.interfaces.js';
 import { Webhooks } from '@octokit/webhooks';
+
+/**
+ * Read a request header case-insensitively across HTTP platforms. The Express
+ * platform exposes `request.headers` as a plain lower-cased object, whereas the
+ * Cloudflare adapter exposes a Fetch `Headers` instance accessed via `.get()`.
+ */
+function getHeader(
+  request: Request,
+  name: string,
+): string | string[] | null | undefined {
+  const headers = request.headers as unknown as
+    | { get?: (key: string) => string | null }
+    | Record<string, string | string[] | undefined>;
+  if (headers && typeof headers.get === 'function') {
+    return headers.get(name);
+  }
+  return (headers as Record<string, string | string[] | undefined>)[name];
+}
 
 @Controller('hook')
 export class WebhookController {
@@ -43,15 +61,15 @@ export class WebhookController {
 
   @Post()
   async handleWebhook(@Req() request: RawBodyRequest<Request>) {
-    const id = request.headers['x-github-delivery'];
+    const id = getHeader(request, 'x-github-delivery');
     if (id !== null && id !== undefined) {
-      const name = request.headers['x-github-event'];
+      const name = getHeader(request, 'x-github-event');
       if (name !== null && name !== undefined) {
         const signature =
           ([] as string[])
             .concat(
-              request.headers['x-hub-signature-256'] ||
-                request.headers['x-hub-signature'] ||
+              getHeader(request, 'x-hub-signature-256') ||
+                getHeader(request, 'x-hub-signature') ||
                 [],
             )
             .join('|') || null;

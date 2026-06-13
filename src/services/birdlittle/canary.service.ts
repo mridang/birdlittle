@@ -1,8 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Octokit } from '@octokit/rest';
-import { getZipFile } from '../../utils/archive';
-import { Release } from './types';
-import { OctokitImpl } from '../github/octokit/types';
+import { getZipFile } from '../../utils/archive.js';
+import { Release } from './types.js';
+import { OctokitImpl } from '../github/octokit/types.js';
 
 @Injectable()
 export default class CanaryService {

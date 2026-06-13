@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import CanaryService from './canary.service';
-import Repository from './types';
-import { WebhookHandler } from '../github/webhook/webhook.interfaces';
+import CanaryService from './canary.service.js';
+import Repository from './types.js';
+import { WebhookHandler } from '../github/webhook/webhook.interfaces.js';
 
 @Injectable()
 export default class ProbotHandler {
@@ -53,7 +53,7 @@ export default class ProbotHandler {
       const { full_name: repoName } = context.payload.repository;
       const { id: runId, actor } = context.payload.workflow_run;
 
-      if (actor.login === 'birdlittle[bot]') {
+      if (actor?.login === 'birdlittle[bot]') {
         this.logger.log(
           `Workflow #${runId} completed successfully for ${repoName}.`,
         );
@@ -70,7 +70,7 @@ export default class ProbotHandler {
         );
       } else {
         this.logger.log(
-          `Ignoring workflow run ${runId} because it was triggered by ${actor.login}`,
+          `Ignoring workflow run ${runId} because it was triggered by ${actor?.login}`,
         );
       }
     });

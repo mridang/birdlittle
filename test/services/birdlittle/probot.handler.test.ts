@@ -1,13 +1,13 @@
-import { expect } from '@jest/globals';
-import CanaryService from '../../../src/services/finch/canary.service';
-import ProbotHandler from '../../../src/services/finch/probot.handler';
+import { expect, jest } from '@jest/globals';
+import CanaryService from '../../../src/services/birdlittle/canary.service.js';
+import ProbotHandler from '../../../src/services/birdlittle/probot.handler.js';
 import { Logger } from '@nestjs/common';
 import {
   EmitterWebhookEvent,
   EmitterWebhookEventName,
 } from '@octokit/webhooks';
-import { HandlerFunction } from '@octokit/webhooks/dist-types/types';
-import { WebhookHandler } from '../../../src/services/github/webhook/webhook.interfaces';
+import { HandlerFunction } from '@octokit/webhooks/types';
+import { WebhookHandler } from '../../../src/services/github/webhook/webhook.interfaces.js';
 
 class MockCanaryService implements Partial<CanaryService> {
   runCanary = jest.fn();
@@ -70,7 +70,7 @@ describe('probot.handler tests', () => {
         action: 'completed',
         workflow_run: {
           id: 11118767062,
-          name: 'Deploy Serverless Application',
+          name: 'Deploy to Cloudflare Workers',
           node_id: 'WFR_kwLOLVs-YM8AAAAClrrr1g',
           head_branch: 'master',
           head_sha: 'bcb5bd0886655f5c19a259b562cb3c1291523e9c',
@@ -383,7 +383,7 @@ describe('probot.handler tests', () => {
         workflow: {
           id: 86832287,
           node_id: 'W_kwDOLVs-YM4FLPSf',
-          name: 'Deploy Serverless Application',
+          name: 'Deploy to Cloudflare Workers',
           path: '.github/workflows/deploy.yml',
           state: 'active',
           created_at: '2024-02-21T00:55:10.000Z',
@@ -392,7 +392,7 @@ describe('probot.handler tests', () => {
           html_url:
             'https://github.com/github/octocat/blob/master/.github/workflows/deploy.yml',
           badge_url:
-            'https://github.com/github/octocat/workflows/Deploy%20Serverless%20Application/badge.svg',
+            'https://github.com/github/octocat/workflows/Deploy%20to%20Cloudflare%20Workers/badge.svg',
         },
         repository: {
           id: 760954464,

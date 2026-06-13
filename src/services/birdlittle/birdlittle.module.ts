@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import CanaryService from './canary.service';
-import { GithubModule } from '../github/github.module';
-import { OctokitModule } from '../github/octokit/octokit.module';
-import ProbotHandler from './probot.handler';
+import CanaryService from './canary.service.js';
+import { GithubModule } from '../github/github.module.js';
+import { OctokitModule } from '../github/octokit/octokit.module.js';
+import ProbotHandler from './probot.handler.js';
 
 @Module({
   controllers: [
@@ -23,6 +23,6 @@ import ProbotHandler from './probot.handler';
     //
   ],
 })
-export class FinchModule {
+export class BirdlittleModule {
   //
 }

@@ -1,19 +1,20 @@
 import { Global, Module } from '@nestjs/common';
-import { secretName } from './constants';
 import { DefaultsModule } from '@mridang/nestjs-defaults';
-import { FinchModule } from './services/finch/finch.module';
+import { BirdlittleModule } from './services/birdlittle/birdlittle.module.js';
+import { HomeController } from './home/home.controller.js';
 
 @Global()
 @Module({
   imports: [
+    // On Workers, config comes from the Worker env (populated into process.env
+    // by nodejs_compat), so the default env-backed secrets source is correct.
     DefaultsModule.register({
-      configName: secretName,
+      assets: false,
+      sentry: true,
     }),
-    FinchModule,
+    BirdlittleModule,
   ],
-  controllers: [
-    //
-  ],
+  controllers: [HomeController],
   providers: [
     //
   ],
