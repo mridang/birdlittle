@@ -35,6 +35,11 @@ export class End2EndModule {
       testModule,
     ) => testModule,
   ): Promise<void> {
+    // Disable Sentry in tests. When `SENTRY_DSN` is set, the nestjs-defaults
+    // reporter dynamically imports `@sentry/node`, which is an optional dep
+    // not installed for this Cloudflare Workers app. Clearing the DSN forces
+    // the no-op reporter and avoids a jest resolution error.
+    delete process.env.SENTRY_DSN;
     const moduleFixture = await testFn(
       Test.createTestingModule({
         controllers: [...this.controllers],
