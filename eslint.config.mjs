@@ -1,8 +1,11 @@
+import { includeIgnoreFile } from '@eslint/compat';
+import { fileURLToPath } from 'node:url';
 import mridangPlugin from '@mridang/eslint-defaults';
 
 export default [
+  includeIgnoreFile(fileURLToPath(new URL('.gitignore', import.meta.url))),
   {
-    ignores: ['.wrangler/**', 'public/**', 'preview/**'],
+    ignores: ['public/**'],
   },
   ...mridangPlugin.configs.recommended,
   {
