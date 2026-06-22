@@ -1,25 +1,29 @@
 import { config } from 'dotenv';
+import { generateKeyPairSync } from 'node:crypto';
 
-// Provide sensible defaults for env vars consumed at module load time so that
-// unit/integration tests can boot the Nest application without real GitHub App
-// credentials being present in the environment (e.g. in CI).
-process.env.GITHUB_APP_ID ||= '1';
-process.env.GITHUB_PRIVATE_KEY ||= '';
-process.env.GITHUB_WEBHOOK_SECRET ||= 'test-webhook-secret';
-process.env.GITHUB_CLIENT_ID ||= 'test-client-id';
-process.env.GITHUB_CLIENT_SECRET ||= 'test-client-secret';
-
+// Load any local .env first so real values take precedence over the defaults.
 config();
 
-// Disable Sentry in tests: when SENTRY_DSN is set, the `nestjs-defaults`
-// reporter dynamically imports `@sentry/node`, which is not installed in this
-// Cloudflare Workers app. Clearing the DSN forces the Noop reporter.
-delete process.env.SENTRY_DSN;
+// Hermetic defaults so the app boots in tests (and in CI, which has no .env)
+// without real credentials. The private key is generated at runtime, so no key
+// material is committed to the repository.
+const { privateKey } = generateKeyPairSync('rsa', {
+  modulusLength: 2048,
+  publicKeyEncoding: { type: 'spki', format: 'pem' },
+  privateKeyEncoding: { type: 'pkcs8', format: 'pem' },
+});
+
+process.env.GITHUB_APP_ID ||= '1';
+process.env.GITHUB_WEBHOOK_SECRET ||= 'test-webhook-secret';
+process.env.GITHUB_PRIVATE_KEY ||= privateKey;
+
+// Disable Sentry in tests: with a DSN set, the nestjs-defaults reporter
+// dynamically imports a runtime SDK that is not installed here. Blanking the
+// DSN forces the no-op reporter.
+process.env.SENTRY_DSN = '';
 
 // noinspection JSUnusedGlobalSymbols
 export default async function setup(): Promise<void> {
-  // No external services are required for the test suite. Configuration is
-  // loaded from `.env` above; the application reads all secrets from the
+  // No external services are required; configuration is read from the
   // environment, so the tests run entirely in-process.
-  delete process.env.SENTRY_DSN;
 }
