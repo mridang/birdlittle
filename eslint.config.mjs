@@ -1,26 +1,20 @@
 import { includeIgnoreFile } from '@eslint/compat';
 import { fileURLToPath } from 'node:url';
-import mridangPlugin from '@mridang/eslint-defaults';
+import mridang from '@mridang/eslint-defaults';
 
 export default [
   includeIgnoreFile(fileURLToPath(new URL('.gitignore', import.meta.url))),
   {
-    ignores: ['public/**'],
+    // public/ holds committed vendored/static assets (e.g. the Tailwind
+    // runtime), worker.mjs is the wrangler entry that imports the compiled
+    // dist (generated post-build), and worker-env.d.ts is an ambient types
+    // file — none are source to lint.
+    ignores: ['public/**', 'worker.mjs', 'src/worker-env.d.ts'],
   },
-  ...mridangPlugin.configs.recommended,
+  ...mridang.configs.recommended,
   {
-    // cloudflare:workers is a runtime-provided virtual module the import
-    // resolver cannot see; treat it as a core module.
+    // cloudflare:workers is a Workers runtime built-in (like node:*) with no
+    // file to resolve; whitelist it so import/no-unresolved stays active.
     settings: { 'import/core-modules': ['cloudflare:workers'] },
-  },
-  {
-    // The worker entry imports the compiled dist, which is absent at lint time.
-    files: ['worker.mjs'],
-    rules: { 'import/no-unresolved': 'off' },
-  },
-  {
-    // Ambient declaration files legitimately use triple-slash references.
-    files: ['**/*.d.ts'],
-    rules: { '@typescript-eslint/triple-slash-reference': 'off' },
   },
 ];
