@@ -26,6 +26,8 @@ export class HomeController {
    */
   @Get('og.png')
   @Header('Content-Type', 'image/png')
+  @Header('Cross-Origin-Resource-Policy', 'cross-origin')
+  @Header('Content-Type', 'image/png')
   @Header('Cache-Control', 'public, max-age=86400, immutable')
   getOgImage(): Buffer {
     // Return the raw PNG bytes as a Buffer (a Uint8Array). The Cloudflare
