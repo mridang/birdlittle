@@ -49,7 +49,7 @@
     "@eslint/compat": "^2.1.0",
     "@jest/globals": "^30.4.1",
     "@mridang/eslint-defaults": "^1.6.3",
-    "@nestjs/platform-express": "^11.1.26",
+    "@nestjs/platform-express": "^12.3.2",
     "@nestjs/schematics": "^11.1.0",
     "@nestjs/testing": "^11.1.26",
     "@tailwindcss/postcss": "^4.3.3",
