@@ -5,6 +5,9 @@ import { ConfigService } from '@nestjs/config';
 import { End2EndModule } from '../../../e2e.module.js';
 import { AppModule } from '../../../../src/app.module.js';
 import { hmacSha256 } from '../../../../src/utils/crypto.js';
+import { installFakeTracing } from '../../../utils/observability/fake-tracing.js';
+
+const tracing = installFakeTracing();
 
 const testModule = new End2EndModule({
   imports: [
@@ -60,6 +63,54 @@ describe('webhook.controller tests', () => {
           //
         });
       });
+  });
+
+  test('puts the event, delivery and numeric ids on the error context', async () => {
+    const webhookSecret = await testModule.app
+      .get(ConfigService)
+      .getOrThrow('GITHUB_WEBHOOK_SECRET');
+    const payload = {
+      action: 'created',
+      installation: { id: 47071570, access_tokens_url: 'https://secret' },
+      repository: { id: 1296269, full_name: 'octocat/Hello-World' },
+      sender: { login: 'octocat' },
+    };
+    const signature = hmacSha256(webhookSecret, JSON.stringify(payload));
+
+    await request(testModule.app.getHttpServer())
+      .post('/hook')
+      .set({
+        'x-github-delivery': 'delivery-1',
+        'x-github-event': 'installation',
+        'Content-Type': 'application/json',
+        'x-hub-signature-256': `sha256=${signature}`,
+      })
+      .send(payload)
+      .expect(HttpStatus.CREATED);
+
+    expect(tracing.attributes).toEqual({
+      'webhook.event': 'installation',
+      'webhook.delivery_id': 'delivery-1',
+      'github.installation_id': 47071570,
+      'github.repository_id': 1296269,
+    });
+  });
+
+  test('sets no context for a request with a bad signature', async () => {
+    for (const key of Object.keys(tracing.attributes)) {
+      delete tracing.attributes[key];
+    }
+    await request(testModule.app.getHttpServer())
+      .post('/hook')
+      .set({
+        'x-github-delivery': 'delivery-2',
+        'x-github-event': 'installation',
+        'Content-Type': 'application/json',
+        'x-hub-signature-256': 'sha256=bad',
+      })
+      .send({ installation: { id: 1 } })
+      .expect(HttpStatus.BAD_REQUEST);
+    expect(tracing.attributes).toEqual({});
   });
 
   test('should return 400 without x-github-delivery header', async () => {

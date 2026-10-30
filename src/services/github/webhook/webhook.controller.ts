@@ -11,6 +11,7 @@ import { Request } from '@mridang/nestjs-defaults';
 import { WebhookEventName } from '@octokit/webhooks-types';
 import { WebhookConfig, WebhookHandler } from './webhook.interfaces.js';
 import { Webhooks } from '@octokit/webhooks';
+import { setErrorContext } from '../../../utils/observability/context.js';
 
 /**
  * Read a request header case-insensitively across HTTP platforms. The Express
@@ -28,6 +29,36 @@ function getHeader(
     return headers.get(name);
   }
   return (headers as Record<string, string | string[] | undefined>)[name];
+}
+
+/**
+ * The numeric id at `payload[key].id`, or undefined. Only the number is kept,
+ * never anything else from the payload.
+ */
+function numericId(payload: unknown, key: string): number | undefined {
+  const value = (payload as Record<string, { id?: unknown } | undefined>)?.[key]
+    ?.id;
+  return typeof value === 'number' ? value : undefined;
+}
+
+/** Put the event, delivery and (numeric) ids on the span, so an error shows them. */
+async function setWebhookContext(
+  event: string,
+  delivery: string,
+  payload: string,
+): Promise<void> {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(payload);
+  } catch {
+    parsed = undefined;
+  }
+  await setErrorContext({
+    'webhook.event': event,
+    'webhook.delivery_id': delivery,
+    'github.installation_id': numericId(parsed, 'installation'),
+    'github.repository_id': numericId(parsed, 'repository'),
+  });
 }
 
 @Controller('hook')
@@ -77,6 +108,11 @@ export class WebhookController {
           const payload = await WebhookController.getPayload(request);
           if (payload !== null && payload !== undefined) {
             if (await this.webhookHandler.webhooks.verify(payload, signature)) {
+              await setWebhookContext(
+                String(name),
+                Array.isArray(id) ? id.join('|') : id,
+                payload,
+              );
               this.logger.log(`Received a webhook for event ${name}`);
               await this.webhookHandler.webhooks.verifyAndReceive({
                 id: Array.isArray(id) ? id.join('|') : id,
