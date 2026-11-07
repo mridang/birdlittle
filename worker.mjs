@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './dist/app.module.js';
 import { configure } from '@mridang/nestjs-defaults';
 import { CloudflareAdapter } from '@mridang/nestjs-platform-cloudflare';
+import { withoutCors } from './dist/utils/cors.js';
+import { withPermissionsPolicy } from './dist/utils/permissions-policy.js';
 import * as Sentry from '@sentry/cloudflare';
 
 // The Cloudflare adapter runs NestJS natively over the Fetch API — no Express,
@@ -37,6 +39,9 @@ export default Sentry.withSentry(
     tracesSampleRate: 1.0,
   }),
   {
-    fetch: (request) => adapter.handle(request),
+    // The defaults enable credentialed CORS for every origin (dropped) and a
+    // short Permissions-Policy (replaced with the full one).
+    fetch: async (request) =>
+      withPermissionsPolicy(withoutCors(await adapter.handle(request))),
   },
 );
