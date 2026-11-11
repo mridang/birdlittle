@@ -18,7 +18,8 @@
  */
 export function withoutCors(response: Response): Response {
   const headers = new Headers(response.headers);
-  for (const name of headers.keys()) {
+  const names = [...headers.keys()];
+  for (const name of names) {
     if (name.startsWith('access-control-')) {
       headers.delete(name);
     }
