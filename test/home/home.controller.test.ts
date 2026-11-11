@@ -1,7 +1,7 @@
 /**
  * @file Tests the home page controller routes.
  */
-// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
+
 import { expect } from '@jest/globals';
 import { HomeController } from '../../src/home/home.controller.js';
 

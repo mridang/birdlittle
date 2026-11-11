@@ -10,9 +10,9 @@ import {
   type Provider,
   type Type,
 } from '@nestjs/common';
-// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
+
 import { type NestExpressApplication } from '@nestjs/platform-express';
-// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
+
 import { Test, TestingModuleBuilder } from '@nestjs/testing';
 
 /** One entry in a Nest module's `imports` list. */

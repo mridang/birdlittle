@@ -3,9 +3,9 @@
  */
 import { Octokit } from '@octokit/rest';
 import CanaryService from '../../../src/services/birdlittle/canary.service.js';
-// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
+
 import { expect } from '@jest/globals';
-// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
+
 import nock from 'nock';
 import AdmZip from 'adm-zip';
 import { HttpStatus } from '@nestjs/common';

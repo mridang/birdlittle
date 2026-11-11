@@ -1,7 +1,7 @@
 /**
  * @file Tests that CORS headers are removed from responses.
  */
-// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
+
 import { expect } from '@jest/globals';
 import { withoutCors } from '../../src/utils/cors.js';
 

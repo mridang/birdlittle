@@ -1,9 +1,9 @@
 /**
  * @file Tests the GitHub webhook endpoint end to end.
  */
-// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
+
 import { expect } from '@jest/globals';
-// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
+
 import request from 'supertest';
 import { HttpStatus } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';

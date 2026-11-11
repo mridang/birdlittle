@@ -1,6 +1,16 @@
 {
   "name": "birdlittle",
   "version": "0.0.1",
+  "description": "A deployment gate for GitHub Enterprise that blocks deploying changes to production if canaries have not passed.",
+  "license": "Apache-2.0",
+  "author": "Mridang Agarwalla",
+  "sideEffects": true,
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "./package.json": "./package.json"
+  },
   "type": "module",
   "scripts": {
     "build": "npm run build:css && tsc -p tsconfig.worker.json",
@@ -43,7 +53,8 @@
     "node": "24.x"
   },
   "repository": {
-    "url": "https://github.com/mridang/birdlittle"
+    "type": "git",
+    "url": "git+https://github.com/mridang/birdlittle.git"
   },
   "devDependencies": {
     "@emnapi/core": "^1.11.3",

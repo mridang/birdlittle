@@ -4,7 +4,6 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 
-// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
 import { beforeAll, describe, expect, it } from '@jest/globals';
 
 describe('app.css', () => {

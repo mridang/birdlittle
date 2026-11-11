@@ -1,7 +1,7 @@
 /**
  * @file Tests the request context attached to the Workers root span.
  */
-// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
+
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { installFakeTracing } from './fake-tracing.js';
 

@@ -1,7 +1,7 @@
 /**
  * @file Fake for the Workers tracing module used by the observability tests.
  */
-// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
+
 import { jest } from '@jest/globals';
 
 /** What a fake span was told. */

@@ -1,7 +1,7 @@
 /**
  * @file Tests how GitHub deployment and workflow events reach the canary service.
  */
-// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
+
 import { expect, jest } from '@jest/globals';
 import CanaryService from '../../../src/services/birdlittle/canary.service.js';
 import ProbotHandler from '../../../src/services/birdlittle/probot.handler.js';
@@ -22,7 +22,7 @@ class MockCanaryService implements Partial<CanaryService> {
 class TestWebhookHandler implements WebhookHandler {
   private readonly handlers: Map<
     EmitterWebhookEventName,
-    HandlerFunction<EmitterWebhookEventName, unknown>[]
+    ((event: EmitterWebhookEvent) => unknown)[]
   > = new Map();
 
   on<E extends EmitterWebhookEventName>(
@@ -34,9 +34,7 @@ class TestWebhookHandler implements WebhookHandler {
     }
     this.handlers
       .get(event)!
-      .push(
-        handler as unknown as HandlerFunction<EmitterWebhookEventName, unknown>,
-      );
+      .push((webhookEvent) => handler(webhookEvent as EmitterWebhookEvent<E>));
   }
 
   dispatch<E extends EmitterWebhookEventName>(

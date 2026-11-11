@@ -1,7 +1,7 @@
 /**
  * @file Jest global setup that fills in hermetic defaults before the suite runs.
  */
-// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
+
 import { config } from 'dotenv';
 import { generateKeyPairSync } from 'node:crypto';
 

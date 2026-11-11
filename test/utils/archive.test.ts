@@ -1,7 +1,7 @@
 /**
  * @file Tests reading a named entry out of a ZIP archive.
  */
-// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
+
 import { expect } from '@jest/globals';
 import AdmZip from 'adm-zip';
 import { getZipFile } from '../../src/utils/archive.js';

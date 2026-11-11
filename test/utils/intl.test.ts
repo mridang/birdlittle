@@ -1,7 +1,7 @@
 /**
  * @file Tests the locale-aware text helpers.
  */
-// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
+
 import { describe, expect, it } from '@jest/globals';
 
 import {
