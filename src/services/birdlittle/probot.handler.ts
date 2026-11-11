@@ -1,3 +1,6 @@
+/**
+ * @file Routes GitHub deployment and workflow events to the canary service.
+ */
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import CanaryService from './canary.service.js';
 import Repository from './types.js';
@@ -53,7 +56,7 @@ export default class ProbotHandler {
         id: Number.NaN,
       };
       const { full_name: repoName } = context.payload.repository;
-      const { id: runId, actor } = context.payload.workflow_run;
+      const { id: runId, actor, conclusion } = context.payload.workflow_run;
 
       if (actor?.login === 'birdlittle[bot]') {
         this.logger.log(
@@ -66,9 +69,7 @@ export default class ProbotHandler {
           runId,
           githubRepo.orgName,
           githubRepo.repoName,
-          context.payload.workflow_run.conclusion === 'success'
-            ? 'approved'
-            : 'rejected',
+          conclusion === 'success' ? 'approved' : 'rejected',
         );
       } else {
         this.logger.log(

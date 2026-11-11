@@ -1,3 +1,7 @@
+/**
+ * @file Vite build configuration that compiles the stylesheet to static assets.
+ */
+// eslint-disable-next-line n/no-unpublished-import -- vite is a dev dependency used only at build time
 import { defineConfig } from 'vite';
 
 // Compiles the Tailwind stylesheet to a single static file served from the

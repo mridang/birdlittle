@@ -1,3 +1,7 @@
+/**
+ * @file Jest global setup that fills in hermetic defaults before the suite runs.
+ */
+// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
 import { config } from 'dotenv';
 import { generateKeyPairSync } from 'node:crypto';
 
@@ -7,6 +11,7 @@ config();
 // Hermetic defaults so the app boots in tests (and in CI, which has no .env)
 // without real credentials. The private key is generated at runtime, so no key
 // material is committed to the repository.
+// eslint-disable-next-line n/no-sync -- sync is fine in a Jest global setup, which runs once before the suite
 const { privateKey } = generateKeyPairSync('rsa', {
   modulusLength: 2048,
   publicKeyEncoding: { type: 'spki', format: 'pem' },
@@ -22,8 +27,13 @@ process.env.GITHUB_PRIVATE_KEY ||= privateKey;
 // DSN forces the no-op reporter.
 process.env.SENTRY_DSN = '';
 
-// noinspection JSUnusedGlobalSymbols
+/**
+ * Runs once before the suite. No external services are required, because
+ * configuration is read from the environment and the tests run in-process.
+ * @returns A promise that resolves once the setup has finished.
+ * @example
+ * // Jest calls this automatically through the globalSetup option.
+ */
 export default async function setup(): Promise<void> {
-  // No external services are required; configuration is read from the
-  // environment, so the tests run entirely in-process.
+  // Nothing to start.
 }

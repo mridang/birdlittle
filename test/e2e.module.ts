@@ -1,3 +1,6 @@
+/**
+ * @file Builds a Nest application for end-to-end tests.
+ */
 import { configure } from '@mridang/nestjs-defaults';
 import {
   type DynamicModule,
@@ -7,21 +10,26 @@ import {
   type Provider,
   type Type,
 } from '@nestjs/common';
+// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
 import { type NestExpressApplication } from '@nestjs/platform-express';
+// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
 import { Test, TestingModuleBuilder } from '@nestjs/testing';
 
+/** One entry in a Nest module's `imports` list. */
+type ModuleImport =
+  Type | DynamicModule | Promise<DynamicModule> | ForwardReference;
+
+/**
+ * Builds a Nest application for end-to-end tests and tears it down afterwards.
+ */
 export class End2EndModule {
   app!: INestApplication;
-  private readonly imports: Array<
-    Type | DynamicModule | Promise<DynamicModule> | ForwardReference
-  >;
+  private readonly imports: ModuleImport[];
   private readonly controllers: Type[];
   private readonly providers: Provider[];
 
   constructor(options: {
-    imports?: Array<
-      Type | DynamicModule | Promise<DynamicModule> | ForwardReference
-    >;
+    imports?: ModuleImport[];
     providers?: Provider[];
     controllers?: Type[];
   }) {

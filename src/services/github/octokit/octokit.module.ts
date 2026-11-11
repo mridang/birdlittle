@@ -1,3 +1,6 @@
+/**
+ * @file Nest module that provides a factory for authenticated Octokit clients.
+ */
 import { FetchImpl } from '@mridang/nestjs-defaults';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { createAppAuth } from '@octokit/auth-app';

@@ -1,3 +1,6 @@
+/**
+ * @file Value types that split release identifiers and repository full names.
+ */
 export class Release {
   public readonly deploymentId: number;
   public readonly environmentName: string;

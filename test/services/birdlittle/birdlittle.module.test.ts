@@ -1,3 +1,7 @@
+/**
+ * @file Tests that the Birdlittle module wires its providers.
+ */
+// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
 import { expect } from '@jest/globals';
 import ProbotHandler from '../../../src/services/birdlittle/probot.handler.js';
 import { End2EndModule } from '../../e2e.module.js';

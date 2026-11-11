@@ -1,3 +1,7 @@
+/**
+ * @file Tests how GitHub deployment and workflow events reach the canary service.
+ */
+// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
 import { expect, jest } from '@jest/globals';
 import CanaryService from '../../../src/services/birdlittle/canary.service.js';
 import ProbotHandler from '../../../src/services/birdlittle/probot.handler.js';
@@ -12,7 +16,7 @@ import { WebhookHandler } from '../../../src/services/github/webhook/webhook.int
 class MockCanaryService implements Partial<CanaryService> {
   runCanary = jest.fn();
   handleGate = jest.fn();
-  logger = { log: jest.fn(), error: jest.fn() }; // Mock any other properties as needed
+  logger = { log: jest.fn(), error: jest.fn() };
 }
 
 class TestWebhookHandler implements WebhookHandler {
@@ -23,7 +27,7 @@ class TestWebhookHandler implements WebhookHandler {
 
   on<E extends EmitterWebhookEventName>(
     event: E,
-    callback: HandlerFunction<E, unknown>,
+    handler: HandlerFunction<E, unknown>,
   ): void {
     if (!this.handlers.has(event)) {
       this.handlers.set(event, []);
@@ -31,10 +35,7 @@ class TestWebhookHandler implements WebhookHandler {
     this.handlers
       .get(event)!
       .push(
-        callback as unknown as HandlerFunction<
-          EmitterWebhookEventName,
-          unknown
-        >,
+        handler as unknown as HandlerFunction<EmitterWebhookEventName, unknown>,
       );
   }
 
@@ -44,13 +45,14 @@ class TestWebhookHandler implements WebhookHandler {
   ) {
     const callbacks = this.handlers.get(event);
     if (callbacks) {
-      for (const callback of callbacks) {
-        callback(payload);
+      for (const listener of callbacks) {
+        listener(payload);
       }
     }
   }
 }
 
+// eslint-disable-next-line sonarjs/max-lines-per-function -- a describe block groups one suite's cases and shared setup
 describe('probot.handler tests', () => {
   let mockCanaryService: MockCanaryService;
   const testHandler = new TestWebhookHandler();
@@ -58,10 +60,13 @@ describe('probot.handler tests', () => {
   beforeEach(() => {
     mockCanaryService = new MockCanaryService();
 
+    // The constructor registers the webhook listeners, which is the behaviour under test.
+    // eslint-disable-next-line sonarjs/constructor-for-side-effects -- instantiating registers the listeners
     new ProbotHandler(mockCanaryService as never, testHandler);
     jest.spyOn(Logger.prototype, 'log').mockImplementation(() => {});
   });
 
+  // eslint-disable-next-line sonarjs/max-lines-per-function -- a describe block groups one suite's cases and shared setup
   test('handles workflow_run.completed event', async () => {
     testHandler.dispatch('workflow_run.completed', {
       id: '11118767062',
@@ -575,6 +580,7 @@ describe('probot.handler tests', () => {
     );
   });
 
+  // eslint-disable-next-line sonarjs/max-lines-per-function -- a describe block groups one suite's cases and shared setup
   test('handles deployment_protection_rule.requested event', async () => {
     testHandler.dispatch('deployment_protection_rule.requested', {
       id: '1',

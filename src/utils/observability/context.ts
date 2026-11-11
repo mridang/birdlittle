@@ -1,4 +1,6 @@
 /**
+ * @file Attaches plain request facts to the Workers root span so errors show them.
+ *
  * Application context for Workers Issues. Cloudflare shows the attributes set
  * on the invocation's root span next to an error, so an error can say what it
  * was about. Everything here is best effort: where there is no Workers runtime
@@ -45,14 +47,20 @@ let loaded: ContextTracing | null | undefined;
  * promise: a promise started in one request must not be waited on in another,
  * which the Workers runtime may never settle. The module is lazy because it
  * exists only in the Workers runtime, and a failure is remembered.
+ * @returns The tracing API when the runtime provides it, otherwise `null`.
+ * @example
+ * const tracing = await load();
  */
-function load(): Promise<ContextTracing | null> {
-  // The specifier is the constant above, never input.
-  // eslint-disable-next-line no-unsanitized/method
-  return import(WORKERS_MODULE).then(
-    (workers: { tracing: ContextTracing }) => (loaded = workers.tracing),
-    () => (loaded = null),
-  );
+async function load(): Promise<ContextTracing | null> {
+  try {
+    // The specifier is the constant above, never input.
+    // eslint-disable-next-line no-unsanitized/method -- the specifier is a constant above, never request input
+    const workers: { tracing: ContextTracing } = await import(WORKERS_MODULE);
+    loaded = workers.tracing;
+  } catch {
+    loaded = null;
+  }
+  return loaded ?? null;
 }
 
 /**
@@ -60,6 +68,10 @@ function load(): Promise<ContextTracing | null> {
  * module has loaded this happens at once, before the call returns, so that
  * context set in a handler that does not wait is still on the span when the
  * invocation ends. Never rejects.
+ * @param apply - The callback that writes to the span it is given.
+ * @returns A promise that resolves once `apply` has run, or straight away when there is no span.
+ * @example
+ * await withActiveSpan((span) => span.setAttribute('event', 'push'));
  */
 function withActiveSpan(apply: (span: ContextSpan) => void): Promise<void> {
   const run = (tracing: ContextTracing | null): void => {
@@ -76,18 +88,29 @@ function withActiveSpan(apply: (span: ContextSpan) => void): Promise<void> {
     run(loaded);
     return Promise.resolve();
   }
-  return load().then(run, () => undefined);
+  return load()
+    .then(run)
+    .catch(() => undefined);
 }
 
-/** The attributes worth keeping: a string, a finite number or a boolean. */
+/**
+ * Keeps the attributes worth recording: a string, a finite number or a boolean.
+ * Strings are cut to the maximum length, and other values are dropped.
+ * @param attributes - The attributes as the caller gave them.
+ * @returns The `[key, value]` pairs that can be set on a span.
+ * @example
+ * accepted({ event: 'push', count: 3, missing: undefined }); // [['event', 'push'], ['count', 3]]
+ */
 function accepted(attributes: ContextAttributes): [string, ContextValue][] {
   const kept: [string, ContextValue][] = [];
   for (const [key, value] of Object.entries(attributes)) {
     if (typeof value === 'string') {
       kept.push([key, value.slice(0, MAX_TEXT)]);
-    } else if (typeof value === 'boolean') {
+    }
+    if (typeof value === 'boolean') {
       kept.push([key, value]);
-    } else if (typeof value === 'number' && Number.isFinite(value)) {
+    }
+    if (typeof value === 'number' && Number.isFinite(value)) {
       kept.push([key, value]);
     }
   }
@@ -100,6 +123,10 @@ function accepted(attributes: ContextAttributes): [string, ContextValue][] {
  * replaces the earlier value). The first call has to load the runtime module,
  * so where the caller is async it should wait for the result; the returned
  * promise never rejects.
+ * @param attributes - The attributes to set on the root span; undefined values are skipped.
+ * @returns A promise that resolves once the attributes are set, or at once when there is nothing to set.
+ * @example
+ * await setErrorContext({ event: 'push', deliveryId: 'abc-123' });
  */
 export function setErrorContext(attributes: ContextAttributes): Promise<void> {
   try {
@@ -120,6 +147,11 @@ export function setErrorContext(attributes: ContextAttributes): Promise<void> {
 /**
  * Record an error on the current invocation's span so Issues groups it by
  * `name`. Send only fixed words, never text that came from a request.
+ * @param name - A fixed word that names the kind of error, used to group it.
+ * @param message - A fixed description of the error, cut to the maximum length.
+ * @returns A promise that resolves once the error is recorded, or at once when there is no span.
+ * @example
+ * await recordErrorOnSpan('WebhookSignatureError', 'Signature did not match.');
  */
 export function recordErrorOnSpan(
   name: string,

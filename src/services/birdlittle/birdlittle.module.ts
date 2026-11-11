@@ -1,3 +1,6 @@
+/**
+ * @file Nest module that provides the canary and probot services.
+ */
 import { Module } from '@nestjs/common';
 import CanaryService from './canary.service.js';
 import { GithubModule } from '../github/github.module.js';

@@ -1,3 +1,6 @@
+/**
+ * @file Triggers the canary workflow and approves or rejects deployment gates.
+ */
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Octokit } from '@octokit/rest';
 import { getZipFile } from '../../utils/archive.js';

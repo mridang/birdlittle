@@ -1,10 +1,18 @@
+/**
+ * @file Tests the canary service that triggers and gates deployments.
+ */
 import { Octokit } from '@octokit/rest';
 import CanaryService from '../../../src/services/birdlittle/canary.service.js';
+// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
+import { expect } from '@jest/globals';
+// eslint-disable-next-line n/no-unpublished-import -- devDependency used only by the test suite, never shipped
 import nock from 'nock';
 import AdmZip from 'adm-zip';
 import { HttpStatus } from '@nestjs/common';
 
+// eslint-disable-next-line sonarjs/max-lines-per-function -- a describe block groups one suite's cases and shared setup
 describe('canary.service test', () => {
+  // eslint-disable-next-line sonarjs/max-lines-per-function -- a describe block groups one suite's cases and shared setup
   beforeEach(() => {
     nock('https://api.github.com')
       .persist()
@@ -288,5 +296,6 @@ describe('canary.service test', () => {
       'testing',
       'approved',
     );
+    expect(nock.isDone()).toBe(true);
   });
 });
