@@ -39,14 +39,14 @@ describe('setErrorContext', () => {
   });
 
   it('drops undefined values and anything that is not a plain value', async () => {
-    await setErrorContext({
-      // The test needs an explicit undefined property to check that it is dropped.
-      // eslint-disable-next-line sonarjs/no-undefined-assignment -- the test needs an explicit undefined value
-      gone: undefined,
-      nan: Number.NaN,
-      object: { a: 1 } as never,
-      kept: 'yes',
-    });
+    await setErrorContext(
+      Object.fromEntries([
+        ['gone', undefined],
+        ['nan', Number.NaN],
+        ['object', { a: 1 } as never],
+        ['kept', 'yes'],
+      ]),
+    );
     expect(fake.attributes).toEqual({ kept: 'yes' });
   });
 

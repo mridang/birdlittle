@@ -32,13 +32,6 @@ interface ContextTracing {
 /** Longest text kept in one attribute; the rest is cut off. */
 const MAX_TEXT = 256;
 
-/**
- * The module's name sits in a constant on purpose: the TypeScript build has no
- * types for a `cloudflare:` module, and a constant specifier is not resolved
- * by it. Wrangler's bundler leaves any `cloudflare:` import to the runtime.
- */
-const WORKERS_MODULE: string = 'cloudflare:workers';
-
 /** The tracing API once loaded; `null` where there is none. */
 let loaded: ContextTracing | null | undefined;
 
@@ -53,10 +46,8 @@ let loaded: ContextTracing | null | undefined;
  */
 async function load(): Promise<ContextTracing | null> {
   try {
-    // The specifier is the constant above, never input.
-    // eslint-disable-next-line no-unsanitized/method -- the specifier is a constant above, never request input
-    const workers: { tracing: ContextTracing } = await import(WORKERS_MODULE);
-    loaded = workers.tracing;
+    const workers = await import('cloudflare:workers');
+    loaded = workers.tracing as ContextTracing;
   } catch {
     loaded = null;
   }

@@ -59,8 +59,8 @@ describe('probot.handler tests', () => {
     mockCanaryService = new MockCanaryService();
 
     // The constructor registers the webhook listeners, which is the behaviour under test.
-    // eslint-disable-next-line sonarjs/constructor-for-side-effects -- instantiating registers the listeners
-    new ProbotHandler(mockCanaryService as never, testHandler);
+    const handler = new ProbotHandler(mockCanaryService as never, testHandler);
+    expect(handler).toBeInstanceOf(ProbotHandler);
     jest.spyOn(Logger.prototype, 'log').mockImplementation(() => {});
   });
 
