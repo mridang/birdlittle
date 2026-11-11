@@ -11,7 +11,7 @@ config();
 // Hermetic defaults so the app boots in tests (and in CI, which has no .env)
 // without real credentials. The private key is generated at runtime, so no key
 // material is committed to the repository.
-// eslint-disable-next-line n/no-sync -- globalSetup is loaded natively by Node, which cannot resolve a .js import to a shared .ts helper, and tsconfig forbids .ts import paths, so generateKeyPair cannot be promisified through a shared module here
+
 const { privateKey } = generateKeyPairSync('rsa', {
   modulusLength: 2048,
   publicKeyEncoding: { type: 'spki', format: 'pem' },
