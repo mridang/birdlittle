@@ -2,8 +2,7 @@
  * @file Tests the GitHub webhook endpoint end to end.
  */
 
-import { expect } from '@jest/globals';
-
+import { afterAll, beforeAll, expect } from '@jest/globals';
 import request from 'supertest';
 import { HttpStatus } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
