@@ -12,7 +12,7 @@
 /** Returns the response without any `Access-Control-*` headers. */
 export function withoutCors(response: Response): Response {
   const headers = new Headers(response.headers);
-  for (const name of [...headers.keys()]) {
+  for (const name of headers.keys()) {
     if (name.startsWith('access-control-')) {
       headers.delete(name);
     }

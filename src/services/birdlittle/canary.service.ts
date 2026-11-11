@@ -37,9 +37,9 @@ export default class CanaryService {
       repo: repoName,
     });
 
-    const workflow = response.data.workflows
-      .filter((workflow) => workflow.path === this.workflowPath)
-      .pop();
+    const workflow = response.data.workflows.findLast(
+      (workflow) => workflow.path === this.workflowPath,
+    );
 
     if (workflow) {
       await octokit.actions.createWorkflowDispatch({

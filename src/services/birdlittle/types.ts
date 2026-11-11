@@ -3,8 +3,8 @@ export class Release {
   public readonly environmentName: string;
 
   constructor(releaseTxt: string) {
-    this.deploymentId = Number(releaseTxt.split('/')[0]);
-    this.environmentName = releaseTxt.split('/')[1];
+    this.deploymentId = Number(releaseTxt.split('/', 1)[0]);
+    this.environmentName = releaseTxt.split('/', 2)[1];
   }
 }
 
@@ -13,7 +13,7 @@ export default class Repository {
   public readonly repoName: string;
 
   constructor(fullName: string) {
-    this.orgName = fullName.split('/')[0];
-    this.repoName = fullName.split('/')[1];
+    this.orgName = fullName.split('/', 1)[0];
+    this.repoName = fullName.split('/', 2)[1];
   }
 }

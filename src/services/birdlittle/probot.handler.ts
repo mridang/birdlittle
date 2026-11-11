@@ -18,10 +18,12 @@ export default class ProbotHandler {
       'deployment_protection_rule.requested',
       async (context) => {
         const { id: installationId } = context.payload.installation ?? {
-          id: NaN,
+          id: Number.NaN,
         };
         const { full_name: repoName } = context.payload.repository;
-        const { id: deploymentId } = context.payload.deployment || { id: NaN };
+        const { id: deploymentId } = context.payload.deployment || {
+          id: Number.NaN,
+        };
 
         this.logger.log(
           `Running canary for deployment ${deploymentId} on ${repoName}`,
@@ -48,7 +50,7 @@ export default class ProbotHandler {
 
     this.webhookHandler.on('workflow_run.completed', async (context) => {
       const { id: installationId } = context.payload.installation ?? {
-        id: NaN,
+        id: Number.NaN,
       };
       const { full_name: repoName } = context.payload.repository;
       const { id: runId, actor } = context.payload.workflow_run;

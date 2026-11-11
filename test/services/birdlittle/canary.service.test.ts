@@ -10,14 +10,14 @@ describe('canary.service test', () => {
       .persist()
       .get('/repos/mridang/testing')
       .reply(HttpStatus.OK, {
-        id: 748500999,
+        id: 748_500_999,
         node_id: 'R_kgDOLJ04Bw',
         name: 'testing',
         full_name: 'mridang/testing',
         private: false,
         owner: {
           login: 'mridang',
-          id: 327432,
+          id: 327_432,
           node_id: 'MDQ6VXNlcjMyNzQzMg==',
           avatar_url: 'https://avatars.githubusercontent.com/u/327432?v=4',
           gravatar_id: '',
@@ -168,7 +168,7 @@ describe('canary.service test', () => {
         total_count: 4,
         workflows: [
           {
-            id: 86719211,
+            id: 86_719_211,
             node_id: 'W_kwDOLJ04B84FKzrr',
             name: 'Run Canary',
             path: '.github/workflows/cypress.yml',
@@ -182,7 +182,7 @@ describe('canary.service test', () => {
               'https://github.com/mridang/testing/workflows/Run%20Canary/badge.svg',
           },
           {
-            id: 83767024,
+            id: 83_767_024,
             node_id: 'W_kwDOLJ04B84E_i7w',
             name: 'Deploy to Staging',
             path: '.github/workflows/deploy.yml',
@@ -196,7 +196,7 @@ describe('canary.service test', () => {
               'https://github.com/mridang/testing/workflows/Deploy%20to%20Staging/badge.svg',
           },
           {
-            id: 84064567,
+            id: 84_064_567,
             node_id: 'W_kwDOLJ04B84FArk3',
             name: 'Release to QA',
             path: '.github/workflows/fail.yml',
@@ -210,7 +210,7 @@ describe('canary.service test', () => {
               'https://github.com/mridang/testing/workflows/Release%20to%20QA/badge.svg',
           },
           {
-            id: 83767025,
+            id: 83_767_025,
             node_id: 'W_kwDOLJ04B84E_i7x',
             name: 'Release to Production',
             path: '.github/workflows/release.yml',
@@ -232,7 +232,7 @@ describe('canary.service test', () => {
         total_count: 1,
         artifacts: [
           {
-            id: 1314065581,
+            id: 1_314_065_581,
             node_id: 'MDg6QXJ0aWZhY3QxMzE0MDY1NTgx',
             name: 'release',
             size_in_bytes: 143,
@@ -244,9 +244,9 @@ describe('canary.service test', () => {
             updated_at: '2024-03-11T07:43:09Z',
             expires_at: '2024-06-09T07:43:00Z',
             workflow_run: {
-              id: 8229268347,
-              repository_id: 748500999,
-              head_repository_id: 748500999,
+              id: 8_229_268_347,
+              repository_id: 748_500_999,
+              head_repository_id: 748_500_999,
               head_branch: 'master',
               head_sha: '09e1a4e946c478762f3b88c90347a17a358d7fc8',
             },
@@ -283,7 +283,7 @@ describe('canary.service test', () => {
     await canaryService.runCanary(1, 1, 'qa', 'mridang', 'testing');
     await canaryService.handleGate(
       1,
-      1314065581,
+      1_314_065_581,
       'mridang',
       'testing',
       'approved',

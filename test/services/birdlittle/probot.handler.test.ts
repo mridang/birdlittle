@@ -69,7 +69,7 @@ describe('probot.handler tests', () => {
       payload: {
         action: 'completed',
         workflow_run: {
-          id: 11118767062,
+          id: 11_118_767_062,
           name: 'Deploy to Cloudflare Workers',
           node_id: 'WFR_kwLOLVs-YM8AAAAClrrr1g',
           head_branch: 'master',
@@ -80,8 +80,8 @@ describe('probot.handler tests', () => {
           event: 'push',
           status: 'completed',
           conclusion: 'success',
-          workflow_id: 86832287,
-          check_suite_id: 29049337155,
+          workflow_id: 86_832_287,
+          check_suite_id: 29_049_337_155,
           check_suite_node_id: 'CS_kwDOLVs-YM8AAAAGw3m1Qw',
           url: 'https://api.github.com/repos/github/octocat/actions/runs/11118767062',
           html_url:
@@ -91,7 +91,7 @@ describe('probot.handler tests', () => {
           updated_at: '2024-10-01T04:45:40Z',
           actor: {
             login: 'birdlittle[bot]',
-            id: 160376679,
+            id: 160_376_679,
             node_id: 'BOT_kgDOCY8nZw',
             avatar_url: 'https://avatars.githubusercontent.com/in/831907?v=4',
             gravatar_id: '',
@@ -122,7 +122,7 @@ describe('probot.handler tests', () => {
           run_started_at: '2024-10-01T04:41:57Z',
           triggering_actor: {
             login: 'mridang',
-            id: 327432,
+            id: 327_432,
             node_id: 'MDQ6VXNlcjMyNzQzMg==',
             avatar_url: 'https://avatars.githubusercontent.com/u/327432?v=4',
             gravatar_id: '',
@@ -174,14 +174,14 @@ describe('probot.handler tests', () => {
             },
           },
           repository: {
-            id: 760954464,
+            id: 760_954_464,
             node_id: 'R_kgDOLVs-YA',
             name: 'octocat',
             full_name: 'github/octocat',
             private: false,
             owner: {
               login: 'mridang',
-              id: 327432,
+              id: 327_432,
               node_id: 'MDQ6VXNlcjMyNzQzMg==',
               avatar_url: 'https://avatars.githubusercontent.com/u/327432?v=4',
               gravatar_id: '',
@@ -277,14 +277,14 @@ describe('probot.handler tests', () => {
               'https://api.github.com/repos/github/octocat/deployments',
           },
           head_repository: {
-            id: 760954464,
+            id: 760_954_464,
             node_id: 'R_kgDOLVs-YA',
             name: 'octocat',
             full_name: 'github/octocat',
             private: false,
             owner: {
               login: 'mridang',
-              id: 327432,
+              id: 327_432,
               node_id: 'MDQ6VXNlcjMyNzQzMg==',
               avatar_url: 'https://avatars.githubusercontent.com/u/327432?v=4',
               gravatar_id: '',
@@ -381,7 +381,7 @@ describe('probot.handler tests', () => {
           },
         },
         workflow: {
-          id: 86832287,
+          id: 86_832_287,
           node_id: 'W_kwDOLVs-YM4FLPSf',
           name: 'Deploy to Cloudflare Workers',
           path: '.github/workflows/deploy.yml',
@@ -395,7 +395,7 @@ describe('probot.handler tests', () => {
             'https://github.com/github/octocat/workflows/Deploy%20to%20Cloudflare%20Workers/badge.svg',
         },
         repository: {
-          id: 760954464,
+          id: 760_954_464,
           node_id: 'R_kgDOLVs-YA',
           name: 'octocat',
           full_name: 'github/octocat',
@@ -403,7 +403,7 @@ describe('probot.handler tests', () => {
           custom_properties: {},
           owner: {
             login: 'mridang',
-            id: 327432,
+            id: 327_432,
             node_id: 'MDQ6VXNlcjMyNzQzMg==',
             avatar_url: 'https://avatars.githubusercontent.com/u/327432?v=4',
             gravatar_id: '',
@@ -537,7 +537,7 @@ describe('probot.handler tests', () => {
         },
         sender: {
           login: 'mridang',
-          id: 327432,
+          id: 327_432,
           node_id: 'MDQ6VXNlcjMyNzQzMg==',
           avatar_url: 'https://avatars.githubusercontent.com/u/327432?v=4',
           gravatar_id: '',
@@ -560,15 +560,15 @@ describe('probot.handler tests', () => {
           site_admin: false,
         },
         installation: {
-          id: 47530305,
+          id: 47_530_305,
           node_id: 'MDIzOkludGVncmF0aW9uSW5zdGFsbGF0aW9uNDc1MzAzMDU=',
         },
       },
     });
 
     expect(mockCanaryService.handleGate).toHaveBeenCalledWith(
-      47530305,
-      11118767062,
+      47_530_305,
+      11_118_767_062,
       'github',
       'octocat',
       'approved',
@@ -587,7 +587,7 @@ describe('probot.handler tests', () => {
           'https://api.github.com/repos/github/octocat/actions/runs/11118767062/deployment_protection_rule',
         deployment: {
           url: 'https://api.github.com/repos/github/octocat/deployments/1840060793',
-          id: 1840060793,
+          id: 1_840_060_793,
           node_id: 'DE_kwDOLVs-YM5trRl5',
           task: 'deploy',
           original_environment: 'production',
@@ -600,7 +600,7 @@ describe('probot.handler tests', () => {
           repository_url: 'https://api.github.com/repos/github/octocat',
           creator: {
             login: 'mridang',
-            id: 327432,
+            id: 327_432,
             node_id: 'MDQ6VXNlcjMyNzQzMg==',
             avatar_url: 'https://avatars.githubusercontent.com/u/327432?v=4',
             gravatar_id: '',
@@ -628,7 +628,7 @@ describe('probot.handler tests', () => {
           transient_environment: false,
           production_environment: false,
           performed_via_github_app: {
-            id: 15368,
+            id: 15_368,
             slug: 'github-actions',
             node_id: 'MDM6QXBwMTUzNjg=',
             owner: {
@@ -720,7 +720,7 @@ describe('probot.handler tests', () => {
         },
         pull_requests: [],
         repository: {
-          id: 760954464,
+          id: 760_954_464,
           node_id: 'R_kgDOLVs-YA',
           name: 'octocat',
           full_name: 'github/octocat',
@@ -728,7 +728,7 @@ describe('probot.handler tests', () => {
           custom_properties: {},
           owner: {
             login: 'mridang',
-            id: 327432,
+            id: 327_432,
             node_id: 'MDQ6VXNlcjMyNzQzMg==',
             avatar_url: 'https://avatars.githubusercontent.com/u/327432?v=4',
             gravatar_id: '',
@@ -862,7 +862,7 @@ describe('probot.handler tests', () => {
         },
         sender: {
           login: 'mridang',
-          id: 327432,
+          id: 327_432,
           node_id: 'MDQ6VXNlcjMyNzQzMg==',
           avatar_url: 'https://avatars.githubusercontent.com/u/327432?v=4',
           gravatar_id: '',
@@ -885,15 +885,15 @@ describe('probot.handler tests', () => {
           site_admin: false,
         },
         installation: {
-          id: 47530305,
+          id: 47_530_305,
           node_id: 'MDIzOkludGVncmF0aW9uSW5zdGFsbGF0aW9uNDc1MzAzMDU=',
         },
       },
     });
 
     expect(mockCanaryService.runCanary).toHaveBeenCalledWith(
-      47530305,
-      11118767062,
+      47_530_305,
+      11_118_767_062,
       'production',
       'github',
       'octocat',
