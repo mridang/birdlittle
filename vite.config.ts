@@ -1,3 +1,7 @@
+/**
+ * @file Vite build configuration that compiles the stylesheet to static assets.
+ */
+
 import { defineConfig } from 'vite';
 
 // Compiles the Tailwind stylesheet to a single static file served from the

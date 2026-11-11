@@ -1,4 +1,8 @@
 /**
+ * @file Holds the HTML document served as the public home page.
+ */
+
+/**
  * The marketing home page served at `GET /`.
  *
  * Kept as a single self-contained HTML string so the Worker can return it

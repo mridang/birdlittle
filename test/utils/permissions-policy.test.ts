@@ -1,3 +1,7 @@
+/**
+ * @file Tests that the Permissions-Policy header is set on responses.
+ */
+
 import { expect } from '@jest/globals';
 import {
   PERMISSIONS_POLICY,

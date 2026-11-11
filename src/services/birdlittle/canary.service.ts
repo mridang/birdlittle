@@ -1,3 +1,6 @@
+/**
+ * @file Triggers the canary workflow and approves or rejects deployment gates.
+ */
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Octokit } from '@octokit/rest';
 import { getZipFile } from '../../utils/archive.js';
@@ -37,9 +40,9 @@ export default class CanaryService {
       repo: repoName,
     });
 
-    const workflow = response.data.workflows
-      .filter((workflow) => workflow.path === this.workflowPath)
-      .pop();
+    const workflow = response.data.workflows.findLast(
+      (workflow) => workflow.path === this.workflowPath,
+    );
 
     if (workflow) {
       await octokit.actions.createWorkflowDispatch({

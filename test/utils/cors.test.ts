@@ -1,3 +1,7 @@
+/**
+ * @file Tests that CORS headers are removed from responses.
+ */
+
 import { expect } from '@jest/globals';
 import { withoutCors } from '../../src/utils/cors.js';
 

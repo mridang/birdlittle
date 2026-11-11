@@ -1,3 +1,6 @@
+/**
+ * @file Root Nest module that wires the defaults, Birdlittle and home page together.
+ */
 import { Global, Module } from '@nestjs/common';
 import { DefaultsModule } from '@mridang/nestjs-defaults';
 import { BirdlittleModule } from './services/birdlittle/birdlittle.module.js';

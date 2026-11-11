@@ -1,3 +1,7 @@
+/**
+ * @file Tests the request context attached to the Workers root span.
+ */
+
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { installFakeTracing } from './fake-tracing.js';
 
@@ -35,12 +39,14 @@ describe('setErrorContext', () => {
   });
 
   it('drops undefined values and anything that is not a plain value', async () => {
-    await setErrorContext({
-      gone: undefined,
-      nan: Number.NaN,
-      object: { a: 1 } as never,
-      kept: 'yes',
-    });
+    await setErrorContext(
+      Object.fromEntries([
+        ['gone', undefined],
+        ['nan', Number.NaN],
+        ['object', { a: 1 } as never],
+        ['kept', 'yes'],
+      ]),
+    );
     expect(fake.attributes).toEqual({ kept: 'yes' });
   });
 

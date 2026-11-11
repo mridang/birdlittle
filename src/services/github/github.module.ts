@@ -1,3 +1,6 @@
+/**
+ * @file Nest module that assembles the GitHub Octokit and webhook providers.
+ */
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { OctokitModule } from './octokit/octokit.module.js';

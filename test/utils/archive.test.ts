@@ -1,3 +1,7 @@
+/**
+ * @file Tests reading a named entry out of a ZIP archive.
+ */
+
 import { expect } from '@jest/globals';
 import AdmZip from 'adm-zip';
 import { getZipFile } from '../../src/utils/archive.js';
