@@ -10,8 +10,8 @@ import { HandlerFunction } from '@octokit/webhooks/types';
 import { WebhookHandler } from '../../../src/services/github/webhook/webhook.interfaces.js';
 
 class MockCanaryService implements Partial<CanaryService> {
-  runCanary = jest.fn();
-  handleGate = jest.fn();
+  runCanary = jest.fn<CanaryService['runCanary']>();
+  handleGate = jest.fn<CanaryService['handleGate']>();
   logger = { log: jest.fn(), error: jest.fn() }; // Mock any other properties as needed
 }
 

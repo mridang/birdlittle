@@ -82,8 +82,10 @@ describe('without the Workers runtime (plain Node, tests)', () => {
   it('does nothing and does not throw', async () => {
     jest.unstable_unmockModule('cloudflare:workers');
     jest.resetModules();
-    const bare =
-      await import('../../../src/utils/observability/context.js?bare');
+    let bare!: typeof import('../../../src/utils/observability/context.js');
+    await jest.isolateModulesAsync(async () => {
+      bare = await import('../../../src/utils/observability/context.js');
+    });
     await expect(bare.setErrorContext({ a: 1 })).resolves.toBeUndefined();
     await expect(bare.recordErrorOnSpan('A', 'b')).resolves.toBeUndefined();
     expect(fake.attributes).toEqual({});
