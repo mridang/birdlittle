@@ -1,6 +1,3 @@
-/**
- * @file Prettier formatting configuration for the repository.
- */
 export default {
   semi: true,
   trailingComma: 'all',
