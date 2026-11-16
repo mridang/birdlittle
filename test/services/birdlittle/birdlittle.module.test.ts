@@ -26,6 +26,6 @@ describe('birdlittle.module tests', () => {
   });
 
   test('that the webhook hander is registered', async () => {
-    expect(await testModule.app.get(ProbotHandler)).toBeDefined();
+    expect(testModule.app.get(ProbotHandler)).toBeDefined();
   });
 });

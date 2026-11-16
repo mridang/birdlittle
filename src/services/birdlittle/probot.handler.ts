@@ -40,7 +40,7 @@ export default class ProbotHandler {
         this.logger.log(
           `Deployment #${deploymentId} has URL ${context.payload.deployment_callback_url}`,
         );
-        if (!match || !match[1]) {
+        if (!match?.[1]) {
           throw new Error(`Unable to parse deployment id`);
         }
 

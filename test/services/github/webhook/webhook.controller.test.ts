@@ -33,9 +33,9 @@ describe('webhook.controller tests', () => {
   });
 
   test('should return 201 when the headers all valid', async () => {
-    const webhookSecret = await testModule.app
+    const webhookSecret = testModule.app
       .get(ConfigService)
-      .getOrThrow('GITHUB_WEBHOOK_SECRET');
+      .getOrThrow<string>('GITHUB_WEBHOOK_SECRET');
 
     const payload = {
       action: 'opened',
@@ -53,7 +53,7 @@ describe('webhook.controller tests', () => {
     };
     const signature = hmacSha256(webhookSecret, JSON.stringify(payload));
 
-    return request(testModule.app.getHttpServer())
+    return request(testModule.server)
       .post('/hook')
       .set({
         'x-github-delivery': '72d3162e-cc78-11e3-81ab-4c9367dc0958',
@@ -71,9 +71,9 @@ describe('webhook.controller tests', () => {
   });
 
   test('puts the event, delivery and numeric ids on the error context', async () => {
-    const webhookSecret = await testModule.app
+    const webhookSecret = testModule.app
       .get(ConfigService)
-      .getOrThrow('GITHUB_WEBHOOK_SECRET');
+      .getOrThrow<string>('GITHUB_WEBHOOK_SECRET');
     const payload = {
       action: 'created',
       installation: { id: 47_071_570, access_tokens_url: 'https://secret' },
@@ -82,7 +82,7 @@ describe('webhook.controller tests', () => {
     };
     const signature = hmacSha256(webhookSecret, JSON.stringify(payload));
 
-    await request(testModule.app.getHttpServer())
+    await request(testModule.server)
       .post('/hook')
       .set({
         'x-github-delivery': 'delivery-1',
@@ -105,7 +105,7 @@ describe('webhook.controller tests', () => {
     for (const key of Object.keys(tracing.attributes)) {
       delete tracing.attributes[key];
     }
-    await request(testModule.app.getHttpServer())
+    await request(testModule.server)
       .post('/hook')
       .set({
         'x-github-delivery': 'delivery-2',
@@ -119,9 +119,9 @@ describe('webhook.controller tests', () => {
   });
 
   test('should return 400 without x-github-delivery header', async () => {
-    const webhookSecret = await testModule.app
+    const webhookSecret = testModule.app
       .get(ConfigService)
-      .getOrThrow('GITHUB_WEBHOOK_SECRET');
+      .getOrThrow<string>('GITHUB_WEBHOOK_SECRET');
     const payload = {
       action: 'opened',
       issue: { number: 1 },
@@ -134,7 +134,7 @@ describe('webhook.controller tests', () => {
     };
     const signature = hmacSha256(webhookSecret, JSON.stringify(payload));
 
-    const response = await request(testModule.app.getHttpServer())
+    const response = await request(testModule.server)
       .post('/hook')
       .set({
         'x-github-event': 'installation',
@@ -147,9 +147,9 @@ describe('webhook.controller tests', () => {
   });
 
   test('should return 400 without x-github-event header', async () => {
-    const webhookSecret = await testModule.app
+    const webhookSecret = testModule.app
       .get(ConfigService)
-      .getOrThrow('GITHUB_WEBHOOK_SECRET');
+      .getOrThrow<string>('GITHUB_WEBHOOK_SECRET');
     const payload = {
       action: 'opened',
       issue: { number: 1 },
@@ -162,7 +162,7 @@ describe('webhook.controller tests', () => {
     };
     const signature = hmacSha256(webhookSecret, JSON.stringify(payload));
 
-    const response = await request(testModule.app.getHttpServer())
+    const response = await request(testModule.server)
       .post('/hook')
       .set({
         'x-github-delivery': '72d3162e-cc78-11e3-81ab-4c9367dc0958',
@@ -175,9 +175,9 @@ describe('webhook.controller tests', () => {
   });
 
   test('should return 400 without x-hub-signature-256 header', async () => {
-    const webhookSecret = await testModule.app
+    const webhookSecret = testModule.app
       .get(ConfigService)
-      .getOrThrow('GITHUB_WEBHOOK_SECRET');
+      .getOrThrow<string>('GITHUB_WEBHOOK_SECRET');
     const payload = {
       action: 'opened',
       issue: { number: 1 },
@@ -190,7 +190,7 @@ describe('webhook.controller tests', () => {
     };
     const signature = hmacSha256(webhookSecret, JSON.stringify(payload));
 
-    const response = await request(testModule.app.getHttpServer())
+    const response = await request(testModule.server)
       .post('/hook')
       .set({
         'x-github-delivery': '72d3162e-cc78-11e3-81ab-4c9367dc0958',
@@ -204,9 +204,9 @@ describe('webhook.controller tests', () => {
   });
 
   test('that pull_request.closed event are handled', async () => {
-    const webhookSecret = await testModule.app
+    const webhookSecret = testModule.app
       .get(ConfigService)
-      .getOrThrow('GITHUB_WEBHOOK_SECRET');
+      .getOrThrow<string>('GITHUB_WEBHOOK_SECRET');
     const payload = {
       action: 'closed',
       number: 1347,
@@ -373,7 +373,7 @@ describe('webhook.controller tests', () => {
     };
     const signature = hmacSha256(webhookSecret, JSON.stringify(payload));
 
-    const response = await request(testModule.app.getHttpServer())
+    const response = await request(testModule.server)
       .post('/hook')
       .set({
         'x-github-delivery': '72d3162e-cc78-11e3-81ab-4c9367dc0958',
@@ -388,9 +388,9 @@ describe('webhook.controller tests', () => {
   });
 
   test('that installation.created events are handled', async () => {
-    const webhookSecret = await testModule.app
+    const webhookSecret = testModule.app
       .get(ConfigService)
-      .getOrThrow('GITHUB_WEBHOOK_SECRET');
+      .getOrThrow<string>('GITHUB_WEBHOOK_SECRET');
     const payload = {
       action: 'created',
       installation: {
@@ -481,7 +481,7 @@ describe('webhook.controller tests', () => {
     };
     const signature = hmacSha256(webhookSecret, JSON.stringify(payload));
 
-    const response = await request(testModule.app.getHttpServer())
+    const response = await request(testModule.server)
       .post('/hook')
       .set({
         'x-github-delivery': '72d3162e-cc78-11e3-81ab-4c9367dc0958',
@@ -496,9 +496,9 @@ describe('webhook.controller tests', () => {
   });
 
   test('that installation_repositories.added event are handled', async () => {
-    const webhookSecret = await testModule.app
+    const webhookSecret = testModule.app
       .get(ConfigService)
-      .getOrThrow('GITHUB_WEBHOOK_SECRET');
+      .getOrThrow<string>('GITHUB_WEBHOOK_SECRET');
     const payload = {
       action: 'added',
       installation: {
@@ -591,7 +591,7 @@ describe('webhook.controller tests', () => {
     };
     const signature = hmacSha256(webhookSecret, JSON.stringify(payload));
 
-    const response = await request(testModule.app.getHttpServer())
+    const response = await request(testModule.server)
       .post('/hook')
       .set({
         'x-github-delivery': '72d3162e-cc78-11e3-81ab-4c9367dc0958',
@@ -606,9 +606,9 @@ describe('webhook.controller tests', () => {
   });
 
   test('that installation_repositories.removed event are handled', async () => {
-    const webhookSecret = await testModule.app
+    const webhookSecret = testModule.app
       .get(ConfigService)
-      .getOrThrow('GITHUB_WEBHOOK_SECRET');
+      .getOrThrow<string>('GITHUB_WEBHOOK_SECRET');
     const payload = {
       action: 'removed',
       installation: {
@@ -701,7 +701,7 @@ describe('webhook.controller tests', () => {
     };
     const signature = hmacSha256(webhookSecret, JSON.stringify(payload));
 
-    const response = await request(testModule.app.getHttpServer())
+    const response = await request(testModule.server)
       .post('/hook')
       .set({
         'x-github-delivery': '72d3162e-cc78-11e3-81ab-4c9367dc0958',

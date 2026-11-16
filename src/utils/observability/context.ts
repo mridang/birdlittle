@@ -64,7 +64,9 @@ async function load(): Promise<ContextTracing | null> {
  * @example
  * await withActiveSpan((span) => span.setAttribute('event', 'push'));
  */
-function withActiveSpan(apply: (span: ContextSpan) => void): Promise<void> {
+async function withActiveSpan(
+  apply: (span: ContextSpan) => void,
+): Promise<void> {
   const run = (tracing: ContextTracing | null): void => {
     try {
       const span = tracing?.getActiveSpan();
@@ -77,9 +79,9 @@ function withActiveSpan(apply: (span: ContextSpan) => void): Promise<void> {
   };
   if (loaded !== undefined) {
     run(loaded);
-    return Promise.resolve();
+    return;
   }
-  return load()
+  await load()
     .then(run)
     .catch(() => undefined);
 }
@@ -119,19 +121,21 @@ function accepted(attributes: ContextAttributes): [string, ContextValue][] {
  * @example
  * await setErrorContext({ event: 'push', deliveryId: 'abc-123' });
  */
-export function setErrorContext(attributes: ContextAttributes): Promise<void> {
+export async function setErrorContext(
+  attributes: ContextAttributes,
+): Promise<void> {
   try {
     const kept = accepted(attributes);
     if (kept.length === 0) {
-      return Promise.resolve();
+      return;
     }
-    return withActiveSpan((span) => {
+    await withActiveSpan((span) => {
       for (const [key, value] of kept) {
         span.setAttribute(key, value);
       }
     });
   } catch {
-    return Promise.resolve();
+    // Context is a convenience: it must never fail a request.
   }
 }
 
@@ -144,7 +148,7 @@ export function setErrorContext(attributes: ContextAttributes): Promise<void> {
  * @example
  * await recordErrorOnSpan('WebhookSignatureError', 'Signature did not match.');
  */
-export function recordErrorOnSpan(
+export async function recordErrorOnSpan(
   name: string,
   message: string,
 ): Promise<void> {
