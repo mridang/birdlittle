@@ -6,7 +6,7 @@ import { afterAll, beforeAll, expect } from '@jest/globals';
 import request from 'supertest';
 import { HttpStatus } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { End2EndModule } from '../../../e2e.module.js';
+import { End2EndModule } from '../../../end-to-end.module.js';
 import { AppModule } from '../../../../src/app.module.js';
 import { hmacSha256 } from '../../../../src/utils/crypto.js';
 import { installFakeTracing } from '../../../utils/observability/fake-tracing.js';

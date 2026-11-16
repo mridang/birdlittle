@@ -4,7 +4,7 @@
 
 import { afterAll, beforeAll, expect } from '@jest/globals';
 import ProbotHandler from '../../../src/services/birdlittle/probot.handler.js';
-import { End2EndModule } from '../../e2e.module.js';
+import { End2EndModule } from '../../end-to-end.module.js';
 import { AppModule } from '../../../src/app.module.js';
 
 const testModule = new End2EndModule({
