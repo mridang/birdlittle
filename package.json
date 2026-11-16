@@ -62,7 +62,7 @@
     "@emnapi/runtime": "^1.11.3",
     "@eslint/compat": "^2.1.1",
     "@jest/globals": "^30.4.1",
-    "@mridang/eslint-defaults": "^2.3.0",
+    "@mridang/eslint-defaults": "^2.4.0",
     "@nestjs/platform-express": "^11.1.26",
     "@nestjs/schematics": "^11.1.0",
     "@nestjs/testing": "^11.1.26",

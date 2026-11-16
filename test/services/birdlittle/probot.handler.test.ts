@@ -3,15 +3,15 @@
  */
 
 import { expect, jest } from '@jest/globals';
-import CanaryService from '../../../src/services/birdlittle/canary.service.js';
+import type CanaryService from '../../../src/services/birdlittle/canary.service.js';
 import ProbotHandler from '../../../src/services/birdlittle/probot.handler.js';
 import { Logger } from '@nestjs/common';
-import {
+import type {
   EmitterWebhookEvent,
   EmitterWebhookEventName,
 } from '@octokit/webhooks';
-import { HandlerFunction } from '@octokit/webhooks/types';
-import { WebhookHandler } from '../../../src/services/github/webhook/webhook.interfaces.js';
+import type { HandlerFunction } from '@octokit/webhooks/types';
+import type { WebhookHandler } from '../../../src/services/github/webhook/webhook.interfaces.js';
 
 class MockCanaryService implements Partial<CanaryService> {
   runCanary = jest.fn<CanaryService['runCanary']>();
@@ -20,14 +20,14 @@ class MockCanaryService implements Partial<CanaryService> {
 }
 
 class TestWebhookHandler implements WebhookHandler {
-  private readonly handlers: Map<
+  private readonly handlers = new Map<
     EmitterWebhookEventName,
     ((event: EmitterWebhookEvent) => unknown)[]
-  > = new Map();
+  >();
 
   on<E extends EmitterWebhookEventName>(
     event: E,
-    handler: HandlerFunction<E, unknown>,
+    handler: HandlerFunction<E>,
   ): void {
     if (!this.handlers.has(event)) {
       this.handlers.set(event, []);

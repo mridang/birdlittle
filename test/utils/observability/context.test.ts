@@ -35,12 +35,12 @@ describe('setErrorContext', () => {
   it('sets the attributes before it returns once the runtime has loaded', async () => {
     await setErrorContext({ warm: true });
     void setErrorContext({ at: 'once' });
-    expect(fake.attributes['at']).toBe('once');
+    expect(fake.attributes.at).toBe('once');
   });
 
   it('drops undefined values and anything that is not a plain value', async () => {
     await setErrorContext(
-      Object.fromEntries([
+      Object.fromEntries<string | number | undefined>([
         ['gone', undefined],
         ['nan', Number.NaN],
         ['object', { a: 1 } as never],
@@ -52,7 +52,7 @@ describe('setErrorContext', () => {
 
   it('cuts long text', async () => {
     await setErrorContext({ long: 'x'.repeat(1000) });
-    expect(String(fake.attributes['long'])).toHaveLength(256);
+    expect(String(fake.attributes.long)).toHaveLength(256);
   });
 
   it('does nothing where there is no active span', async () => {
@@ -88,7 +88,10 @@ describe('without the Workers runtime (plain Node, tests)', () => {
   it('does nothing and does not throw', async () => {
     jest.unstable_unmockModule('cloudflare:workers');
     jest.resetModules();
-    let bare!: typeof import('../../../src/utils/observability/context.js');
+    let bare!: {
+      setErrorContext: typeof setErrorContext;
+      recordErrorOnSpan: typeof recordErrorOnSpan;
+    };
     await jest.isolateModulesAsync(async () => {
       bare = await import('../../../src/utils/observability/context.js');
     });

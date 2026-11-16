@@ -1,6 +1,7 @@
 /**
  * @file Builds a Nest application for end-to-end tests.
  */
+import type { Server } from 'node:http';
 import { configure } from '@mridang/nestjs-defaults';
 import {
   type DynamicModule,
@@ -11,9 +12,10 @@ import {
   type Type,
 } from '@nestjs/common';
 
-import { type NestExpressApplication } from '@nestjs/platform-express';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 
-import { Test, TestingModuleBuilder } from '@nestjs/testing';
+import type { TestingModuleBuilder } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 
 /** One entry in a Nest module's `imports` list. */
 type ModuleImport =
@@ -60,6 +62,14 @@ export class End2EndModule {
     configure(nestApp);
     await nestApp.init();
     this.app = nestApp;
+  }
+
+  /**
+   * The HTTP server of the running application, typed for supertest.
+   * @returns The underlying Node HTTP server.
+   */
+  get server(): Server {
+    return this.app.getHttpServer() as Server;
   }
 
   async afterAll(): Promise<void> {

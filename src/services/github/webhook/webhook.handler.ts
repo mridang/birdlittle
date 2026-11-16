@@ -25,10 +25,7 @@ export class DefaultWebhookHandler implements WebhookHandler {
    * @example
    * handler.on('installation', async ({ payload }) => { ... });
    */
-  on<E extends EmitterWebhookEventName>(
-    event: E,
-    handler: HandlerFunction<E, unknown>,
-  ) {
+  on<E extends EmitterWebhookEventName>(event: E, handler: HandlerFunction<E>) {
     this.logger.log(`Registered handler for ${event}`);
     this.webhooks.on(event, handler);
   }

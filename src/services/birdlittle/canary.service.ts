@@ -17,7 +17,7 @@ export default class CanaryService {
       accessTokenOrInstallationId: number | string,
     ) => Octokit,
     @Inject('WORKFLOW_NAME')
-    private readonly workflowPath: string = '.github/workflows/cypress.yml',
+    private readonly workflowPath = '.github/workflows/cypress.yml',
   ) {
     //
   }
@@ -100,7 +100,10 @@ export default class CanaryService {
         },
       );
 
-      const releaseTxt = getZipFile(Buffer.from(archive.data), 'release.txt');
+      const releaseTxt = getZipFile(
+        Buffer.from(archive.data as ArrayBuffer),
+        'release.txt',
+      );
       this.logger.log(
         `Found release identifier ${releaseTxt.trim()} in archive`,
       );
