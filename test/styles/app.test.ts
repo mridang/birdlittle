@@ -6,6 +6,13 @@ import path from 'node:path';
 
 import { beforeAll, describe, expect, it } from '@jest/globals';
 
+/** The rule that gives every clickable control a pointer cursor. */
+const CURSOR_RULE_PATTERN =
+  /(button:not\(:disabled\),[^{]*)\{\s*cursor: pointer;/;
+
+/** A button rule that is not left alone when its control is disabled. */
+const UNDISABLED_BUTTON_PATTERN = /(^|,)\s*button,/;
+
 describe('app.css', () => {
   let css = '';
 
@@ -18,19 +25,23 @@ describe('app.css', () => {
 
   describe('cursor', () => {
     const cursorRule = (): string | undefined =>
-      /(button:not\(:disabled\),[^{]*)\{\s*cursor: pointer;/.exec(css)?.[1];
+      CURSOR_RULE_PATTERN.exec(css)?.[1];
 
     it('is the pointer for anything clickable, since Tailwind 4 no longer gives buttons one', () => {
       const rule = cursorRule();
-      ['button:not(:disabled)', 'summary', 'select:not(:disabled)'].forEach(
-        (selector) => expect(rule).toContain(selector),
-      );
+      for (const selector of [
+        'button:not(:disabled)',
+        'summary',
+        'select:not(:disabled)',
+      ]) {
+        expect(rule).toContain(selector);
+      }
       expect(rule).toContain("[role='button']");
     });
 
     it('is left alone for disabled controls', () => {
       const rule = cursorRule();
-      expect(rule).not.toMatch(/(^|,)\s*button,/);
+      expect(rule).not.toMatch(UNDISABLED_BUTTON_PATTERN);
       expect(rule).toContain(':not(:disabled)');
     });
   });

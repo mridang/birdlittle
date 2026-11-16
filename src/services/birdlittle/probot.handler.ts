@@ -6,6 +6,10 @@ import CanaryService from './canary.service.js';
 import Repository from './types.js';
 import { WebhookHandler } from '../github/webhook/webhook.interfaces.js';
 
+/** Matches the workflow run id in a deployment protection rule callback URL. */
+const DEPLOYMENT_PROTECTION_RULE_PATTERN =
+  /runs\/(\d+)\/deployment_protection_rule/;
+
 @Injectable()
 export default class ProbotHandler {
   private readonly logger = new Logger(ProbotHandler.name);
@@ -15,8 +19,6 @@ export default class ProbotHandler {
     @Inject(WebhookHandler)
     readonly webhookHandler: WebhookHandler,
   ) {
-    const regex: RegExp = /runs\/(\d+)\/deployment_protection_rule/;
-
     this.webhookHandler.on(
       'deployment_protection_rule.requested',
       async (context) => {
@@ -32,7 +34,9 @@ export default class ProbotHandler {
           `Running canary for deployment ${deploymentId} on ${repoName}`,
         );
 
-        const match = context.payload.deployment_callback_url?.match(regex);
+        const match = context.payload.deployment_callback_url?.match(
+          DEPLOYMENT_PROTECTION_RULE_PATTERN,
+        );
         this.logger.log(
           `Deployment #${deploymentId} has URL ${context.payload.deployment_callback_url}`,
         );

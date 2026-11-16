@@ -2,6 +2,7 @@
  * @file Jest global setup that fills in hermetic defaults before the suite runs.
  */
 
+// eslint-disable-next-line e18e/ban-dependencies -- dotenv skips a missing .env silently, process.loadEnvFile would throw
 import { config } from 'dotenv';
 import { generateKeyPairSync } from 'node:crypto';
 
