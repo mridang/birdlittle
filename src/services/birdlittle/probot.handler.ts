@@ -26,7 +26,7 @@ export default class ProbotHandler {
           id: Number.NaN,
         };
         const { full_name: repoName } = context.payload.repository;
-        const { id: deploymentId } = context.payload.deployment || {
+        const { id: deploymentId } = context.payload.deployment ?? {
           id: Number.NaN,
         };
 

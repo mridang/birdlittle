@@ -41,7 +41,7 @@ export default class CanaryService {
     });
 
     const workflow = response.data.workflows.findLast(
-      (workflow) => workflow.path === this.workflowPath,
+      (candidate) => candidate.path === this.workflowPath,
     );
 
     if (workflow) {
@@ -83,7 +83,7 @@ export default class CanaryService {
       },
     );
 
-    const artifact = artifacts.find((artifact) => artifact.name === 'release');
+    const artifact = artifacts.find((entry) => entry.name === 'release');
     if (artifact === undefined) {
       throw new Error('Artifact not found.');
     } else {
@@ -100,10 +100,11 @@ export default class CanaryService {
         },
       );
 
-      const releaseTxt = getZipFile(
-        Buffer.from(archive.data as ArrayBuffer),
-        'release.txt',
-      );
+      const archiveData: unknown = archive.data;
+      if (!(archiveData instanceof ArrayBuffer)) {
+        throw new TypeError('The release artifact was not returned as bytes.');
+      }
+      const releaseTxt = getZipFile(Buffer.from(archiveData), 'release.txt');
       this.logger.log(
         `Found release identifier ${releaseTxt.trim()} in archive`,
       );

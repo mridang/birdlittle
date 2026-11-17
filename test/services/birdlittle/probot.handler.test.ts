@@ -5,19 +5,13 @@
 import { expect, jest } from '@jest/globals';
 import { Logger } from '@nestjs/common';
 import ProbotHandler from '../../../src/services/birdlittle/probot.handler.js';
-import type CanaryService from '../../../src/services/birdlittle/canary.service.js';
+import CanaryService from '../../../src/services/birdlittle/canary.service.js';
 import type {
   EmitterWebhookEvent,
   EmitterWebhookEventName,
 } from '@octokit/webhooks';
 import type { HandlerFunction } from '@octokit/webhooks/types';
 import type { WebhookHandler } from '../../../src/services/github/webhook/webhook.interfaces.js';
-
-class MockCanaryService implements Partial<CanaryService> {
-  runCanary = jest.fn<CanaryService['runCanary']>();
-  handleGate = jest.fn<CanaryService['handleGate']>();
-  logger = { log: jest.fn(), error: jest.fn() };
-}
 
 class TestWebhookHandler implements WebhookHandler {
   private readonly handlers = new Map<
@@ -33,6 +27,7 @@ class TestWebhookHandler implements WebhookHandler {
       this.handlers.set(event, []);
     }
     this.handlers.get(event)!.push((webhookEvent) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- the registry is keyed by event name at runtime, so the event type parameter E is erased in the stored callbacks and dispatch only sends payloads of the name the handler registered for
       void handler(webhookEvent as EmitterWebhookEvent<E>);
     });
   }
@@ -52,14 +47,20 @@ class TestWebhookHandler implements WebhookHandler {
 
 // eslint-disable-next-line sonarjs/max-lines-per-function -- a describe block groups one suite's cases and shared setup
 describe('probot.handler tests', () => {
-  let mockCanaryService: MockCanaryService;
+  let canaryService: CanaryService;
+  let runCanary: jest.SpiedFunction<CanaryService['runCanary']>;
+  let handleGate: jest.SpiedFunction<CanaryService['handleGate']>;
   const testHandler = new TestWebhookHandler();
 
   beforeEach(() => {
-    mockCanaryService = new MockCanaryService();
+    canaryService = new CanaryService(() => {
+      throw new Error('The canary service is stubbed in this suite');
+    });
+    runCanary = jest.spyOn(canaryService, 'runCanary').mockResolvedValue();
+    handleGate = jest.spyOn(canaryService, 'handleGate').mockResolvedValue();
 
     // The constructor registers the webhook listeners, which is the behaviour under test.
-    const handler = new ProbotHandler(mockCanaryService as never, testHandler);
+    const handler = new ProbotHandler(canaryService, testHandler);
     expect(handler).toBeInstanceOf(ProbotHandler);
     jest.spyOn(Logger.prototype, 'log').mockImplementation(() => {});
   });
@@ -569,7 +570,7 @@ describe('probot.handler tests', () => {
       },
     });
 
-    expect(mockCanaryService.handleGate).toHaveBeenCalledWith(
+    expect(handleGate).toHaveBeenCalledWith(
       47_530_305,
       11_118_767_062,
       'github',
@@ -895,7 +896,7 @@ describe('probot.handler tests', () => {
       },
     });
 
-    expect(mockCanaryService.runCanary).toHaveBeenCalledWith(
+    expect(runCanary).toHaveBeenCalledWith(
       47_530_305,
       11_118_767_062,
       'production',
