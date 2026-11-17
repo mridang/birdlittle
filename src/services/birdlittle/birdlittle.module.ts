@@ -2,9 +2,9 @@
  * @file Nest module that provides the canary and probot services.
  */
 import { Module } from '@nestjs/common';
-import CanaryService from './canary.service.js';
 import { GithubModule } from '../github/github.module.js';
 import { OctokitModule } from '../github/octokit/octokit.module.js';
+import CanaryService from './canary.service.js';
 import ProbotHandler from './probot.handler.js';
 
 @Module({
@@ -16,9 +16,7 @@ import ProbotHandler from './probot.handler.js';
     ProbotHandler,
     {
       provide: 'WORKFLOW_NAME',
-      useFactory: () => {
-        return '.github/workflows/cypress.yml';
-      },
+      useFactory: () => '.github/workflows/cypress.yml',
     },
   ],
   imports: [OctokitModule, GithubModule],

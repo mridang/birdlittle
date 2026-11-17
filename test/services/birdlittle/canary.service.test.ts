@@ -2,13 +2,13 @@
  * @file Tests the canary service that triggers and gates deployments.
  */
 import { Octokit } from '@octokit/rest';
-import CanaryService from '../../../src/services/birdlittle/canary.service.js';
 
 import { expect } from '@jest/globals';
 
 import nock from 'nock';
 import AdmZip from 'adm-zip';
 import { HttpStatus } from '@nestjs/common';
+import CanaryService from '../../../src/services/birdlittle/canary.service.js';
 
 // eslint-disable-next-line sonarjs/max-lines-per-function -- a describe block groups one suite's cases and shared setup
 describe('canary.service test', () => {
@@ -282,11 +282,12 @@ describe('canary.service test', () => {
   });
 
   test('that canaries are triggered"', async () => {
-    const canaryService = new CanaryService(() => {
-      return new Octokit({
-        auth: 'no',
-      });
-    });
+    const canaryService = new CanaryService(
+      () =>
+        new Octokit({
+          auth: 'no',
+        }),
+    );
 
     await canaryService.runCanary(1, 1, 'qa', 'mridang', 'testing');
     await canaryService.handleGate(

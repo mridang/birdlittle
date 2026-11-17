@@ -4,6 +4,11 @@
  */
 declare module 'cloudflare:workers' {
   export const tracing: {
-    getActiveSpan(): unknown;
+    getActiveSpan():
+      | {
+          setAttribute(key: string, value: string | number | boolean): void;
+          recordException(exception: { name: string; message: string }): void;
+        }
+      | undefined;
   };
 }
