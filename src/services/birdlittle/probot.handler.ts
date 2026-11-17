@@ -2,13 +2,13 @@
  * @file Routes GitHub deployment and workflow events to the canary service.
  */
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { WebhookHandler } from '../github/webhook/webhook.interfaces.js';
 import CanaryService from './canary.service.js';
 import Repository from './types.js';
-import { WebhookHandler } from '../github/webhook/webhook.interfaces.js';
 
 /** Matches the workflow run id in a deployment protection rule callback URL. */
 const DEPLOYMENT_PROTECTION_RULE_PATTERN =
-  /runs\/(\d+)\/deployment_protection_rule/;
+  /runs\/(\d+)\/deployment_protection_rule/u;
 
 @Injectable()
 export default class ProbotHandler {

@@ -2,9 +2,9 @@
  * @file Default webhook handler that registers GitHub event listeners with Octokit.
  */
 import { EmitterWebhookEventName, Webhooks } from '@octokit/webhooks';
-import { WebhookConfig, WebhookHandler } from './webhook.interfaces.js';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { HandlerFunction } from '@octokit/webhooks/types';
+import { WebhookConfig, WebhookHandler } from './webhook.interfaces.js';
 
 /**
  * Owns the Octokit webhook receiver and lets other services subscribe to events.

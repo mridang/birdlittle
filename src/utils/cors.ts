@@ -17,13 +17,11 @@
  * return withoutCors(await fetch(request));
  */
 export function withoutCors(response: Response): Response {
-  const headers = new Headers(response.headers);
-  const names = [...headers.keys()];
-  for (const name of names) {
-    if (name.startsWith('access-control-')) {
-      headers.delete(name);
-    }
-  }
+  const headers = new Headers(
+    [...response.headers].filter(
+      ([name]) => !name.startsWith('access-control-'),
+    ),
+  );
   return new Response(response.body, {
     status: response.status,
     statusText: response.statusText,

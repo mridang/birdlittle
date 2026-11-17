@@ -3,9 +3,9 @@
  */
 
 import { expect, jest } from '@jest/globals';
-import type CanaryService from '../../../src/services/birdlittle/canary.service.js';
-import ProbotHandler from '../../../src/services/birdlittle/probot.handler.js';
 import { Logger } from '@nestjs/common';
+import ProbotHandler from '../../../src/services/birdlittle/probot.handler.js';
+import type CanaryService from '../../../src/services/birdlittle/canary.service.js';
 import type {
   EmitterWebhookEvent,
   EmitterWebhookEventName,
@@ -22,7 +22,7 @@ class MockCanaryService implements Partial<CanaryService> {
 class TestWebhookHandler implements WebhookHandler {
   private readonly handlers = new Map<
     EmitterWebhookEventName,
-    ((event: EmitterWebhookEvent) => unknown)[]
+    ((event: EmitterWebhookEvent) => void)[]
   >();
 
   on<E extends EmitterWebhookEventName>(
@@ -32,9 +32,9 @@ class TestWebhookHandler implements WebhookHandler {
     if (!this.handlers.has(event)) {
       this.handlers.set(event, []);
     }
-    this.handlers
-      .get(event)!
-      .push((webhookEvent) => handler(webhookEvent as EmitterWebhookEvent<E>));
+    this.handlers.get(event)!.push((webhookEvent) => {
+      void handler(webhookEvent as EmitterWebhookEvent<E>);
+    });
   }
 
   dispatch<E extends EmitterWebhookEventName>(

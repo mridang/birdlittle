@@ -7,14 +7,14 @@ import {
   Inject,
   Logger,
   Post,
-  type RawBodyRequest,
   Req,
 } from '@nestjs/common';
 import { Request } from '@mridang/nestjs-defaults';
 import { WebhookEventName } from '@octokit/webhooks-types';
-import { WebhookConfig, WebhookHandler } from './webhook.interfaces.js';
 import { Webhooks } from '@octokit/webhooks';
 import { setErrorContext } from '../../../utils/observability/context.js';
+import { WebhookConfig, WebhookHandler } from './webhook.interfaces.js';
+import type { RawBodyRequest } from '@nestjs/common';
 
 /** One header value: a single string, or several when the header repeats. */
 type HeaderValue = string | string[];
@@ -40,18 +40,22 @@ function getHeader(request: Request, name: string): HeaderValue | undefined {
   return value ?? undefined;
 }
 
+/** A parsed webhook body as far as this file reads it, or `null` when it did not parse. */
+type WebhookPayload = Readonly<
+  Record<string, { readonly id?: unknown } | undefined>
+> | null;
+
 /**
  * Reads the numeric id at `payload[key].id`, keeping only the number and never
  * anything else from the payload.
- * @param payload - The parsed webhook payload, or any value that failed to parse.
+ * @param payload - The parsed webhook payload, or `null` when it failed to parse.
  * @param key - The payload property that holds the object with the id, such as `repository`.
  * @returns The numeric id, or undefined when the property or its id is missing or not a number.
  * @example
  * const repositoryId = numericId(parsed, 'repository');
  */
-function numericId(payload: unknown, key: string): number | undefined {
-  const value = (payload as Record<string, { id?: unknown } | undefined>)?.[key]
-    ?.id;
+function numericId(payload: WebhookPayload, key: string): number | undefined {
+  const value = payload?.[key]?.id;
   return typeof value === 'number' ? value : undefined;
 }
 
@@ -69,12 +73,13 @@ async function setWebhookContext(
   delivery: string,
   payload: string,
 ): Promise<void> {
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(payload);
-  } catch {
-    parsed = null;
-  }
+  const parsed = ((): WebhookPayload => {
+    try {
+      return JSON.parse(payload) as WebhookPayload;
+    } catch {
+      return null;
+    }
+  })();
   await setErrorContext({
     'webhook.event': event,
     'webhook.delivery_id': delivery,
@@ -103,9 +108,8 @@ export class WebhookController {
         request.rawBody instanceof Buffer
         ? Promise.resolve(request.rawBody.toString('utf8'))
         : Promise.resolve(request.body);
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Post()
@@ -142,7 +146,7 @@ export class WebhookController {
     this.logger.log(`Received a webhook for event ${String(name)}`);
     await this.webhookHandler.webhooks.verifyAndReceive({
       id: deliveryId,
-      signature: signature,
+      signature,
       payload,
       name: name as WebhookEventName,
     });

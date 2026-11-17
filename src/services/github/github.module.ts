@@ -17,14 +17,12 @@ import { WebhookModule } from './webhook/webhook.module.js';
     ConfigModule,
     OctokitModule,
     WebhookModule.registerAsync({
-      useFactory: async (configService: ConfigService, webhookHandler) => {
-        return {
-          webhookConfig: {
-            webhookSecret: configService.getOrThrow('GITHUB_WEBHOOK_SECRET'),
-          },
-          webhookHandler,
-        };
-      },
+      useFactory: async (configService: ConfigService, webhookHandler) => ({
+        webhookConfig: {
+          webhookSecret: configService.getOrThrow('GITHUB_WEBHOOK_SECRET'),
+        },
+        webhookHandler,
+      }),
       inject: [ConfigService],
     }),
   ],
