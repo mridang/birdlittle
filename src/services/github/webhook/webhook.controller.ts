@@ -30,20 +30,44 @@ type HeaderValue = string | string[];
  * const delivery = getHeader(request, 'x-github-delivery');
  */
 function getHeader(request: Request, name: string): HeaderValue | undefined {
-  const headers = request.headers as unknown as
-    | { get?: (key: string) => string | null }
-    | Record<string, HeaderValue | undefined>;
-  const value =
-    headers && typeof headers.get === 'function'
-      ? headers.get(name)
-      : (headers as Record<string, HeaderValue | undefined>)[name];
-  return value ?? undefined;
+  const headers: unknown = request.headers;
+  if (headers instanceof Headers) {
+    return headers.get(name) ?? undefined;
+  }
+  return request.headers[name];
 }
 
-/** A parsed webhook body as far as this file reads it, or `null` when it did not parse. */
-type WebhookPayload = Readonly<
-  Record<string, { readonly id?: unknown } | undefined>
-> | null;
+/** A parsed webhook body as far as this file reads it, or `null` when it did not parse to a JSON object. */
+type WebhookPayload = Readonly<Record<string, unknown>> | null;
+
+/**
+ * Tells whether a parsed JSON value is an object with named properties.
+ * @param value - The value `JSON.parse` returned.
+ * @returns True for a JSON object, false for arrays, `null` and primitives.
+ * @example
+ * isJsonObject({ id: 1 });
+ */
+function isJsonObject(
+  value: unknown,
+): value is Readonly<Record<string, unknown>> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+/**
+ * Parses a webhook body, giving `null` when it is not valid JSON or not an object.
+ * @param payload - The raw webhook body.
+ * @returns The parsed object, or `null`.
+ * @example
+ * const parsed = parseWebhookPayload(rawBody);
+ */
+function parseWebhookPayload(payload: string): WebhookPayload {
+  try {
+    const value: unknown = JSON.parse(payload);
+    return isJsonObject(value) ? value : null;
+  } catch {
+    return null;
+  }
+}
 
 /**
  * Reads the numeric id at `payload[key].id`, keeping only the number and never
@@ -55,8 +79,11 @@ type WebhookPayload = Readonly<
  * const repositoryId = numericId(parsed, 'repository');
  */
 function numericId(payload: WebhookPayload, key: string): number | undefined {
-  const value = payload?.[key]?.id;
-  return typeof value === 'number' ? value : undefined;
+  const entry = payload?.[key];
+  if (typeof entry !== 'object' || entry === null || !('id' in entry)) {
+    return undefined;
+  }
+  return typeof entry.id === 'number' ? entry.id : undefined;
 }
 
 /**
@@ -73,13 +100,7 @@ async function setWebhookContext(
   delivery: string,
   payload: string,
 ): Promise<void> {
-  const parsed = ((): WebhookPayload => {
-    try {
-      return JSON.parse(payload) as WebhookPayload;
-    } catch {
-      return null;
-    }
-  })();
+  const parsed = parseWebhookPayload(payload);
   await setErrorContext({
     'webhook.event': event,
     'webhook.delivery_id': delivery,
@@ -148,6 +169,7 @@ export class WebhookController {
       id: deliveryId,
       signature,
       payload,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- the event name is an arbitrary request header and @octokit/webhooks-types exports no runtime list of its names to check it against; verifyAndReceive reports an unknown event itself
       name: name as WebhookEventName,
     });
   }
