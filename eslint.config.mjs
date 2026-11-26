@@ -19,6 +19,13 @@ export default [
   },
   ...mridang.configs.recommended,
   {
+    // eslint-plugin-sonarjs 4.2.3 added no-empty-test-file to the preset,
+    // which flags every source file in this project as an empty test file.
+    rules: {
+      'sonarjs/no-empty-test-file': 'off',
+    },
+  },
+  {
     // cloudflare:workers is a Workers runtime built-in (like node:*) with no
     // file to resolve; whitelist it so import/no-unresolved stays active.
     settings: { 'import/core-modules': ['cloudflare:workers'] },
